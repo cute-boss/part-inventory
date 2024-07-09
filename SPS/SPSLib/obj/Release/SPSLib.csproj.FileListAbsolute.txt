@@ -1,0 +1,12 @@
+D:\Source\Repos\15_SPS Project\SPS\SPSLib\bin\Release\SPSLib.dll
+D:\Source\Repos\15_SPS Project\SPS\SPSLib\bin\Release\SPSLib.pdb
+D:\Source\Repos\15_SPS Project\SPS\SPSLib\obj\Release\SPSLib.csprojAssemblyReference.cache
+D:\Source\Repos\15_SPS Project\SPS\SPSLib\obj\Release\SPSLib.csproj.CoreCompileInputs.cache
+D:\Source\Repos\15_SPS Project\SPS\SPSLib\obj\Release\SPSLib.dll
+D:\Source\Repos\15_SPS Project\SPS\SPSLib\obj\Release\SPSLib.pdb
+D:\Source\Repos\05_SPS Project\SPS\SPSLib\bin\Release\SPSLib.dll
+D:\Source\Repos\05_SPS Project\SPS\SPSLib\bin\Release\SPSLib.pdb
+D:\Source\Repos\05_SPS Project\SPS\SPSLib\obj\Release\SPSLib.csprojAssemblyReference.cache
+D:\Source\Repos\05_SPS Project\SPS\SPSLib\obj\Release\SPSLib.csproj.CoreCompileInputs.cache
+D:\Source\Repos\05_SPS Project\SPS\SPSLib\obj\Release\SPSLib.dll
+D:\Source\Repos\05_SPS Project\SPS\SPSLib\obj\Release\SPSLib.pdb
