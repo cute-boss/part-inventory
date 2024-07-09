@@ -1,0 +1,515 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EA31C5D9-9A13-43C7-B84B-D3101A7A6F07}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SPS</RootNamespace>
+    <AssemblyName>SPS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.Data, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.Data.3.2.7\lib\net45\WebMatrix.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="WebMatrix.WebData, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.WebData.3.2.7\lib\net45\WebMatrix.WebData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BuildingController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\MiscController.cs" />
+    <Compile Include="Controllers\PartController.cs" />
+    <Compile Include="Controllers\RackController.cs" />
+    <Compile Include="Controllers\RecordController.cs" />
+    <Compile Include="Controllers\RptInOutController.cs" />
+    <Compile Include="Controllers\RptInventoryController.cs" />
+    <Compile Include="Controllers\RptLogController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="DAL\DALBuilding.cs" />
+    <Compile Include="DAL\DALLog.cs" />
+    <Compile Include="DAL\DALMisc.cs" />
+    <Compile Include="DAL\DALPart.cs" />
+    <Compile Include="DAL\DALPartRack.cs" />
+    <Compile Include="DAL\DALRack.cs" />
+    <Compile Include="DAL\DALRecord.cs" />
+    <Compile Include="DAL\DALSession.cs" />
+    <Compile Include="DAL\DALUser.cs" />
+    <Compile Include="Filters\CheckSession.cs" />
+    <Compile Include="Filters\NoCache.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\BuildingModels.cs" />
+    <Compile Include="Models\MiscModels.cs" />
+    <Compile Include="Models\PartModels.cs" />
+    <Compile Include="Models\PartRackModels.cs" />
+    <Compile Include="Models\RackModels.cs" />
+    <Compile Include="Models\RecordModels.cs" />
+    <Compile Include="Models\RptInOutModels.cs" />
+    <Compile Include="Models\RptInventoryModels.cs" />
+    <Compile Include="Models\RptLogModels.cs" />
+    <Compile Include="Models\UserModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\custom.css" />
+    <Content Include="Content\datatables\datatables-autofill\autoFill.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-autofill\autoFill.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-bs4\dataTables.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-bs4\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-buttons\buttons.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-buttons\buttons.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-colreorder\colReorder.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-colreorder\colReorder.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-fixedcolumns\fixedColumns.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-fixedcolumns\fixedColumns.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-fixedheader\fixedHeader.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-fixedheader\fixedHeader.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-keytable\keyTable.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-keytable\keyTable.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-responsive\responsive.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-responsive\responsive.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-rowgroup\rowGroup.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-rowgroup\rowGroup.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-rowreorder\rowReorder.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-rowreorder\rowReorder.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-scroller\scroller.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-scroller\scroller.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-searchbuilder\searchBuilder.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-searchbuilder\searchBuilder.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-searchpanes\searchPanes.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-searchpanes\searchPanes.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables-select\select.bootstrap4.css" />
+    <Content Include="Content\datatables\datatables-select\select.bootstrap4.min.css" />
+    <Content Include="Content\datatables\dataTables.bootstrap4.css" />
+    <Content Include="Content\datatables\dataTables.bootstrap4.min.css" />
+    <Content Include="Content\datatables\datatables\jquery.dataTables.js" />
+    <Content Include="Content\datatables\datatables\jquery.dataTables.min.js" />
+    <Content Include="Content\dropzone\basic.css" />
+    <Content Include="Content\dropzone\dropzone.css" />
+    <Content Include="Content\ekko-lightbox\ekko-lightbox.css" />
+    <Content Include="Content\fontawesome-free\css\all.css" />
+    <Content Include="Content\fontawesome-free\css\all.min.css" />
+    <Content Include="Content\fontawesome-free\css\brands.css" />
+    <Content Include="Content\fontawesome-free\css\brands.min.css" />
+    <Content Include="Content\fontawesome-free\css\fontawesome.css" />
+    <Content Include="Content\fontawesome-free\css\fontawesome.min.css" />
+    <Content Include="Content\fontawesome-free\css\regular.css" />
+    <Content Include="Content\fontawesome-free\css\regular.min.css" />
+    <Content Include="Content\fontawesome-free\css\solid.css" />
+    <Content Include="Content\fontawesome-free\css\solid.min.css" />
+    <Content Include="Content\fontawesome-free\css\svg-with-js.css" />
+    <Content Include="Content\fontawesome-free\css\svg-with-js.min.css" />
+    <Content Include="Content\fontawesome-free\css\v4-shims.css" />
+    <Content Include="Content\fontawesome-free\css\v4-shims.min.css" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-brands-400.svg" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-regular-400.svg" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-solid-900.svg" />
+    <Content Include="Content\sb-admin-2\sb-admin-2.css" />
+    <Content Include="Content\sb-admin-2\sb-admin-2.min.css" />
+    <Content Include="Content\select2\select2-bootstrap4.css" />
+    <Content Include="Content\select2\select2-bootstrap4.min.css" />
+    <Content Include="Content\select2\select2.css" />
+    <Content Include="Content\select2\select2.min.css" />
+    <Content Include="Content\sweetalert2\bootstrap-4.css" />
+    <Content Include="Content\sweetalert2\bootstrap-4.min.css" />
+    <Content Include="Content\sweetalert2\sweetalert2.css" />
+    <Content Include="Content\sweetalert2\sweetalert2.min.css" />
+    <Content Include="Content\tempusdominus\tempusdominus-bootstrap-4.css" />
+    <Content Include="Content\tempusdominus\tempusdominus-bootstrap-4.min.css" />
+    <Content Include="Content\toastr\toastr.css" />
+    <Content Include="Content\toastr\toastr.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-brands-400.eot" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-brands-400.ttf" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-brands-400.woff" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-brands-400.woff2" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-regular-400.eot" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-regular-400.ttf" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-regular-400.woff" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-regular-400.woff2" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-solid-900.eot" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-solid-900.ttf" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-solid-900.woff" />
+    <Content Include="Content\fontawesome-free\webfonts\fa-solid-900.woff2" />
+    <Content Include="Images\image_error.png" />
+    <Content Include="Images\loader_small.gif" />
+    <Content Include="Images\no_image.png" />
+    <Content Include="Images\sps_icon.png" />
+    <Content Include="Scripts\custom.js" />
+    <Content Include="Scripts\DataTables\datatables-autofill\autoFill.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-autofill\autoFill.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-autofill\dataTables.autoFill.js" />
+    <Content Include="Scripts\DataTables\datatables-autofill\dataTables.autoFill.min.js" />
+    <Content Include="Scripts\DataTables\datatables-bs4\dataTables.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-bs4\dataTables.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.colVis.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.colVis.min.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.flash.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.flash.min.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.html5.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.html5.min.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.print.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\buttons.print.min.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\dataTables.buttons.js" />
+    <Content Include="Scripts\DataTables\datatables-buttons\dataTables.buttons.min.js" />
+    <Content Include="Scripts\DataTables\datatables-colreorder\colReorder.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-colreorder\colReorder.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-colreorder\dataTables.colReorder.js" />
+    <Content Include="Scripts\DataTables\datatables-colreorder\dataTables.colReorder.min.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedcolumns\dataTables.fixedColumns.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedcolumns\dataTables.fixedColumns.min.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedcolumns\fixedColumns.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedcolumns\fixedColumns.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedheader\dataTables.fixedHeader.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedheader\dataTables.fixedHeader.min.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedheader\fixedHeader.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-fixedheader\fixedHeader.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-keytable\dataTables.keyTable.js" />
+    <Content Include="Scripts\DataTables\datatables-keytable\dataTables.keyTable.min.js" />
+    <Content Include="Scripts\DataTables\datatables-keytable\keyTable.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-keytable\keyTable.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-responsive\dataTables.responsive.js" />
+    <Content Include="Scripts\DataTables\datatables-responsive\dataTables.responsive.min.js" />
+    <Content Include="Scripts\DataTables\datatables-responsive\responsive.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-responsive\responsive.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-rowgroup\dataTables.rowGroup.js" />
+    <Content Include="Scripts\DataTables\datatables-rowgroup\dataTables.rowGroup.min.js" />
+    <Content Include="Scripts\DataTables\datatables-rowgroup\dataTables.rowsGroup.js" />
+    <Content Include="Scripts\DataTables\datatables-rowgroup\rowGroup.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-rowgroup\rowGroup.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-rowreorder\dataTables.rowReorder.js" />
+    <Content Include="Scripts\DataTables\datatables-rowreorder\dataTables.rowReorder.min.js" />
+    <Content Include="Scripts\DataTables\datatables-rowreorder\rowReorder.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-rowreorder\rowReorder.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-scroller\dataTables.scroller.js" />
+    <Content Include="Scripts\DataTables\datatables-scroller\dataTables.scroller.min.js" />
+    <Content Include="Scripts\DataTables\datatables-scroller\scroller.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-scroller\scroller.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-searchbuilder\dataTables.searchBuilder.js" />
+    <Content Include="Scripts\DataTables\datatables-searchbuilder\dataTables.searchBuilder.min.js" />
+    <Content Include="Scripts\DataTables\datatables-searchbuilder\searchBuilder.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-searchbuilder\searchBuilder.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-searchpanes\dataTables.searchPanes.js" />
+    <Content Include="Scripts\DataTables\datatables-searchpanes\dataTables.searchPanes.min.js" />
+    <Content Include="Scripts\DataTables\datatables-searchpanes\searchPanes.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-searchpanes\searchPanes.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables-select\dataTables.select.js" />
+    <Content Include="Scripts\DataTables\datatables-select\dataTables.select.min.js" />
+    <Content Include="Scripts\DataTables\datatables-select\select.bootstrap4.js" />
+    <Content Include="Scripts\DataTables\datatables-select\select.bootstrap4.min.js" />
+    <Content Include="Scripts\DataTables\datatables\jquery.dataTables.js" />
+    <Content Include="Scripts\DataTables\datatables\jquery.dataTables.min.js" />
+    <Content Include="Scripts\DataTables\datetime-moment.js" />
+    <Content Include="Scripts\dropzone\dropzone.js" />
+    <Content Include="Scripts\ekko-lightbox\ekko-lightbox.js" />
+    <Content Include="Scripts\ekko-lightbox\ekko-lightbox.min.js" />
+    <Content Include="Scripts\jszip.js" />
+    <Content Include="Scripts\jszip.min.js" />
+    <Content Include="sps_icon.ico" />
+    <Content Include="webfonts\fa-brands-400.svg" />
+    <Content Include="webfonts\fa-regular-400.svg" />
+    <Content Include="webfonts\fa-solid-900.svg" />
+    <Content Include="Scripts\bootstrap\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\bootstrap\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\ekko-lightbox\ekko-lightbox.js.map" />
+    <Content Include="Scripts\ekko-lightbox\ekko-lightbox.min.js.map" />
+    <None Include="Scripts\jquery-3.6.0.intellisense.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.js" />
+    <Content Include="Scripts\bootstrap\bootstrap.min.js" />
+    <Content Include="Scripts\fontawesome-free\all.js" />
+    <Content Include="Scripts\fontawesome-free\all.min.js" />
+    <Content Include="Scripts\fontawesome-free\brands.js" />
+    <Content Include="Scripts\fontawesome-free\brands.min.js" />
+    <Content Include="Scripts\fontawesome-free\conflict-detection.js" />
+    <Content Include="Scripts\fontawesome-free\conflict-detection.min.js" />
+    <Content Include="Scripts\fontawesome-free\fontawesome.js" />
+    <Content Include="Scripts\fontawesome-free\fontawesome.min.js" />
+    <Content Include="Scripts\fontawesome-free\regular.js" />
+    <Content Include="Scripts\fontawesome-free\regular.min.js" />
+    <Content Include="Scripts\fontawesome-free\solid.js" />
+    <Content Include="Scripts\fontawesome-free\solid.min.js" />
+    <Content Include="Scripts\fontawesome-free\v4-shims.js" />
+    <Content Include="Scripts\fontawesome-free\v4-shims.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.slim.min.map" />
+    <Content Include="Scripts\jquery-3.6.0.min.map" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-easing\jquery.easing.compatibility.js" />
+    <Content Include="Scripts\jquery-easing\jquery.easing.js" />
+    <Content Include="Scripts\jquery-easing\jquery.easing.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery\jquery.js" />
+    <Content Include="Scripts\jquery\jquery.min.js" />
+    <Content Include="Scripts\jquery\jquery.slim.js" />
+    <Content Include="Scripts\jquery\jquery.slim.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\moment\moment-with-locales.js" />
+    <Content Include="Scripts\moment\moment-with-locales.min.js" />
+    <Content Include="Scripts\moment\moment.js" />
+    <Content Include="Scripts\moment\moment.min.js" />
+    <Content Include="Scripts\sb-admin-2\sb-admin-2.js" />
+    <Content Include="Scripts\sb-admin-2\sb-admin-2.min.js" />
+    <Content Include="Scripts\select2\select2.js" />
+    <Content Include="Scripts\select2\select2.min.js" />
+    <Content Include="Scripts\sweetalert2\sweetalert2.all.js" />
+    <Content Include="Scripts\sweetalert2\sweetalert2.all.min.js" />
+    <Content Include="Scripts\sweetalert2\sweetalert2.js" />
+    <Content Include="Scripts\sweetalert2\sweetalert2.min.js" />
+    <Content Include="Scripts\tempusdominus\tempusdominus-bootstrap-4.js" />
+    <Content Include="Scripts\tempusdominus\tempusdominus-bootstrap-4.min.js" />
+    <Content Include="Scripts\toastr\toastr.js" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Scripts\toastr\toastr.js.map" />
+    <Content Include="Views\Shared\_LayoutLogin.cshtml" />
+    <Content Include="webfonts\fa-brands-400.eot" />
+    <Content Include="webfonts\fa-brands-400.ttf" />
+    <Content Include="webfonts\fa-brands-400.woff" />
+    <Content Include="webfonts\fa-brands-400.woff2" />
+    <Content Include="webfonts\fa-regular-400.eot" />
+    <Content Include="webfonts\fa-regular-400.ttf" />
+    <Content Include="webfonts\fa-regular-400.woff" />
+    <Content Include="webfonts\fa-regular-400.woff2" />
+    <Content Include="webfonts\fa-solid-900.eot" />
+    <Content Include="webfonts\fa-solid-900.ttf" />
+    <Content Include="webfonts\fa-solid-900.woff" />
+    <Content Include="webfonts\fa-solid-900.woff2" />
+    <Content Include="Views\Shared\_SideBarAdmin.cshtml" />
+    <Content Include="Views\Shared\_SideBarUser.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ChangePassword.cshtml" />
+    <Content Include="Views\Misc\Index.cshtml" />
+    <Content Include="Views\Part\Index.cshtml" />
+    <Content Include="Views\Part\Detail.cshtml" />
+    <Content Include="Views\Part\Add.cshtml" />
+    <Content Include="Views\Part\Edit.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Views\User\Add.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\Shared\_NavBar.cshtml" />
+    <Content Include="Views\RptLog\Index.cshtml" />
+    <Content Include="Views\Record\Index.cshtml" />
+    <Content Include="Views\Record\Detail.cshtml" />
+    <Content Include="Views\Building\Add.cshtml" />
+    <Content Include="Views\Building\Detail.cshtml" />
+    <Content Include="Views\Building\Edit.cshtml" />
+    <Content Include="Views\Building\Index.cshtml" />
+    <Content Include="Views\Rack\Add.cshtml" />
+    <Content Include="Views\Rack\Detail.cshtml" />
+    <Content Include="Views\Rack\Edit.cshtml" />
+    <Content Include="Views\Rack\Index.cshtml" />
+    <Content Include="Views\Record\Import.cshtml" />
+    <Content Include="Views\Record\RecordInOut.cshtml" />
+    <Content Include="Views\Record\RecordType.cshtml" />
+    <Content Include="Views\RptInOut\Index.cshtml" />
+    <Content Include="Views\RptInventory\Index.cshtml" />
+    <Content Include="Uploads\Import_Batch_File_Template.csv" />
+    <Content Include="Views\Record\RecordTransfer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SPSLib\SPSLib.csproj">
+      <Project>{75ee1c15-fd9b-4e14-9039-53e3a2c03d66}</Project>
+      <Name>SPSLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55004</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55004/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>
