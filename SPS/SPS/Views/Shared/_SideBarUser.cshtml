@@ -1,0 +1,74 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Shared/_SidebarUser.cshtml                                                                           */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+<div class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion sidebar-toggled toggled" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index", "Record")">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <img src="~/sps_icon.ico" alt="Logo">
+        </div>
+        <div class="sidebar-brand-text mx-3 text-sm-left">Spare Part System (SPS)</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Main
+    </div>
+
+    <!-- Nav Item - Record -->
+    <div class="nav-item @(ViewBag.Current == "Record" ? "active" : "")">
+        <a class="nav-link" href="@Url.Action("Index", "Record")">
+            <i class="fas fa-barcode"></i>
+            <span>In/Out</span>
+            <span>Record</span>
+        </a>
+    </div>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Report
+    </div>
+
+    <!-- Nav Item - Report Collapse Menu -->
+    <div class="nav-item @(ViewBag.Report == true ? "active" : "")">
+        <a class="nav-link collapsed" id="adminReport" href="#" data-toggle="collapse" data-target="#collapseAdminReport" aria-expanded="true"
+           aria-controls="collapseReport">
+            <i class="fas fa-chart-bar"></i>
+            <span>Report</span>
+        </a>
+        <div id="collapseAdminReport" class="collapse" aria-labelledby="adminReport" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Report</h6>
+                <a class="collapse-item @(ViewBag.Current == "In/Out" ? "active" : "")" href="@Url.Action("Index", "RptInOut")">In/Out</a>
+                <a class="collapse-item @(ViewBag.Current == "Inventory" ? "active" : "")" href="@Url.Action("Index", "RptInventory")">Inventory</a>
+                <a class="collapse-item @(ViewBag.Current == "Log" ? "active" : "")" href="@Url.Action("Index", "RptLog")">Log</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</div>

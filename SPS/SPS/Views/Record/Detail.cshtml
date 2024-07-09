@@ -1,0 +1,87 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Record/Detail.cshtml                                                                                 */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      28/02/2023  Add status for record transfer                                  Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@using SPSLib
+@model SPS.Models.RecordInOutModels
+@{
+    ViewBag.Title = "Record Detail";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Record Information</h5>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                <strong>@Html.LabelFor(m => m.RackCode, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RackCode)</p>
+                                <hr />
+                                <strong>@Html.LabelFor(m => m.PartCode, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.PartCode)</p>
+                                <hr />
+                                <strong>@Html.LabelFor(m => m.RecordDateTime, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RecordDateTime)</p>
+                                <strong>@Html.LabelFor(m => m.RecordQty, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RecordQty)</p>
+                                <strong>@Html.LabelFor(m => m.RecordStatus, new { @class = "text-sm" })</strong>
+                                if (Model.RecordStatus == (int)EnumEx.RecordStatus.STATUS_IN)
+                                {
+                                    <div><p class="badge badge-success">In</p></div>
+                                }
+                                else if (Model.RecordStatus == (int)EnumEx.RecordStatus.STATUS_OUT)
+                                {
+                                    <div><p class="badge badge-danger">Out</p></div>
+                                }
+                                else
+                                {
+                                    <div><p class="badge badge-primary">Transfer</p></div>
+                                }
+                                <strong>@Html.LabelFor(m => m.RecordBy, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RecordBy)</p>
+                                <strong>@Html.LabelFor(m => m.RecordRemark, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RecordRemark)</p>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            @Html.ActionLink("Back", "Index", "Record", new { }, new { @class = "btn btn-primary btn-sm" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

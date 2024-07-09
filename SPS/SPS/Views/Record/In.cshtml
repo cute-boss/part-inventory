@@ -1,0 +1,160 @@
+﻿@model SPS.Models.RecordEditModels
+@{
+    ViewBag.Title = "Add Record";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("EnterRackBuilding", "Record")">Enter Rack</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("In", "Record", FormMethod.Post, new { id = "formIn", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.RackBuilding.RackCode)
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- card Information -->
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Record Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <strong>@Html.LabelFor(m => m.RackBuilding.RackCode, new { @class = "uppercase text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RackBuilding.RackCode)</p>
+                                <hr />
+                                <div class="form-group pt-1">
+                                    @Html.LabelFor(m => m.RecordModel.PartCode)
+                                    @Html.TextBoxFor(m => m.RecordModel.PartCode, new { @class = "form-control uppercase replace", autofocus = "autofocus", id = "txtInOutPartCode", placeholder = "Please enter part code" })
+                                    @Html.ValidationMessageFor(m => m.RecordModel.PartCode, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RecordModel.RecordQty)
+                                    @Html.TextBoxFor(m => m.RecordModel.RecordQty, "{0:#.#}", new { @class = "form-control uppercase", id = "txtRecordQty", placeholder = "" })
+                                    @Html.ValidationMessageFor(m => m.RecordModel.RecordQty, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RecordModel.RecordRemark)
+                                    @Html.TextAreaFor(m => m.RecordModel.RecordRemark, new { @class = "form-control uppercase", rows = 3, id = "txtRecordRemark", placeholder = "Please enter remark" })
+                                    @Html.ValidationMessageFor(m => m.RecordModel.RecordRemark, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                @Html.ActionLink("Back", "EnterRackBuilding", "Record", new { }, new { @class = "btn btn-primary btn-sm" })
+                                <button type="submit" class="btn btn-success btn-sm float-right" id="btnIn">Add</button>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+        }
+    </div>
+    <!-- /.container-fluid -->
+</section>
+@section Scripts{
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Replace all ',' comma char to " " empty char
+            $(function () {
+                $(".replace").on("keyup", function () {
+                    var value = $(this).val();
+                    if (value.indexOf(',') != -1) {
+                        $(this).val(value.replace(/\,/g, ""));
+                    }
+                })
+            });
+
+            // Change to input upper case
+            $('.uppercase').blur(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            // Go to next textbox when enter is pressed
+            $('body').on('keydown', 'input, select', function (e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var self = $(this), form = self.parents('form:eq(0)'), focusable, next;
+                    focusable = form.find('input').filter(':visible');
+                    next = focusable.eq(focusable.index(this) + 1);
+                    if (next.length) {
+                        next.focus();
+                    }
+                    return false;
+                }
+            });
+
+            // Add submit validation
+            $("#btnIn").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var form = $("#formIn");
+                if (form.valid()) {
+                    form.submit();
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show success msg
+                    if (ViewBag.Status == true){
+                        <text>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: '@ViewBag.Message',
+                                showConfirmButton: true,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            }).then(function (result) {
+                                if (true) {
+                                    window.location.href = "@Url.Action("In", "Record")";
+                                }
+                            })
+                        </text>
+                    }
+                    // Show error msg
+                    else{
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+
+        });
+    </script>
+}

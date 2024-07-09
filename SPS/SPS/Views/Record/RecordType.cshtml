@@ -1,0 +1,147 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Record/RecordType.cshtml                                                                             */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      14/02/2023  Add RecordStatus radio button                                   Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@using SPSLib
+@model SPS.Models.RecordTypeModels
+@{
+    ViewBag.Title = "Record Type";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("RecordType", "Record", FormMethod.Post, new { id = "formRecordType", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Record Type Information</h5>
+                            </div>
+                            <div class="card-body inputSection">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RecordStatus)<br />
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        @Html.RadioButtonFor(m => m.RecordStatus, (int)EnumEx.RecordStatus.STATUS_IN, new { id = "RecordTypeStatusIn", name = "radioBtn", @checked = true, @class = "custom-control-input" })
+                                        @Html.Label("in", "In", new { @for = "RecordTypeStatusIn", @class = "custom-control-label" })
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        @Html.RadioButtonFor(m => m.RecordStatus, (int)EnumEx.RecordStatus.STATUS_OUT, new { id = "RecordTypeStatusOut", name = "radioBtn", @class = "custom-control-input" })
+                                        @Html.Label("out", "Out", new { @for = "RecordTypeStatusOut", @class = "custom-control-label" })
+                                    </div>
+                                    <div class="custom-control custom-radio custom-control-inline">
+                                        @Html.RadioButtonFor(m => m.RecordStatus, (int)EnumEx.RecordStatus.STATUS_TRANSFER, new { id = "RecordTypeStatusTransfer", name = "radioBtn", @class = "custom-control-input" })
+                                        @Html.Label("transfer", "Transfer", new { @for = "RecordTypeStatusTransfer", @class = "custom-control-label" })
+                                    </div>
+                                </div>
+                                <div class="form-group inputField">
+                                    @Html.LabelFor(m => m.RackCode)
+                                    @*Html.TextBoxFor(m => m.RackCode, new { @class = "form-control uppercase", autofocus = "autofocus", id = "txtRecordTypeRack", placeholder = "Please enter rack code" })*@
+                                    @Html.DropDownListFor(m => m.RackCode, Model.RackList, "Please select rack", new { @class = "form-control select2", id = "cmbboxRecordTypeRack", style = "width: 100%;" })
+                                    @Html.ValidationMessageFor(m => m.RackCode, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group pt-3">
+                                    <button type="submit" class="btn btn-success btn-block" id="btnRecordType">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script>
+        $(document).ready(function () {
+
+            // Change to input upper case
+            $('.uppercase').blur(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            // Initialize select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            })
+
+            // Submit form when enter key is pressed
+            $('.inputSection').on('keyup', '.inputField', function (e) {
+                if (e.keyCode == 13) {
+                    $('#formRecordType').submit();
+                    return false;
+                }
+            });
+
+            // Add submit validation
+            $("#btnRecordType").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var form = $("#formRecordType");
+                if (form.valid()) {
+                    form.submit();
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show success msg
+                    if (ViewBag.Status == "InOut")
+                    {
+                        <text>
+                            window.location.href = "@Html.Raw(Url.Action("RecordInOut", "Record", new { sRackCode = Model.RackCode, iRecordStatus = Model.RecordStatus }))";
+                        </text>
+                    }
+                    else if (ViewBag.Status == "Transfer")
+                    {
+                        <text>
+                            window.location.href = "@Html.Raw(Url.Action("RecordTransfer", "Record", new { sRackCode = Model.RackCode, iRecordStatus = Model.RecordStatus }))";
+                        </text>
+                    }
+                    // Show error msg
+                    else
+                    {
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+        });
+</script>
+}

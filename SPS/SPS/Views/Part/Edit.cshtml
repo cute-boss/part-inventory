@@ -1,0 +1,219 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Part/Edit.cshtml                                                                                     */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      30/10/2022  Enlarge image when clicked                                      Azmir               */
+/*      09/03/2023  Add minimum quantity textbox                                    Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@using SPSLib
+@model SPS.Models.PartModels
+@{
+    ViewBag.Title = "Edit Part";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Part")">Part</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Edit", "Part", FormMethod.Post, new { id = "formEditPart", enctype = "multipart/form-data", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.PartId)
+            @Html.HiddenFor(m => m.OldPartCode)
+            @Html.HiddenFor(m => m.OldPartFileName)
+            @Html.HiddenFor(m => m.OldPartGUIDFileName)
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Part Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PartCode, new { @class = "text-sm" })
+                                    @Html.TextBoxFor(m => m.PartCode, new { @class = "form-control uppercase replace", autofocus = "autofocus", id = "txtEditPartCode", placeholder = "Please enter part code" })
+                                    @Html.ValidationMessageFor(m => m.PartCode, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PartName, new { @class = "text-sm" })
+                                    @Html.TextBoxFor(m => m.PartName, new { @class = "form-control uppercase", placeholder = "Please enter part name" })
+                                    @Html.ValidationMessageFor(m => m.PartName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PartDesc)
+                                    @Html.TextAreaFor(m => m.PartDesc, new { @class = "form-control uppercase", rows = 4, placeholder = "Please enter part description" })
+                                    @Html.ValidationMessageFor(m => m.PartDesc, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PartMinQty)
+                                    @Html.TextBoxFor(m => m.PartMinQty, "{0:#.#}", new { @class = "form-control", type = "number", id = "txtEditPartMinQty", placeholder = "Please enter minimum quantity" })
+                                    @Html.ValidationMessageFor(m => m.PartMinQty, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.PartFileName)
+                                    @Html.TextBoxFor(m => m.PartFileName, new { name = "file", type = "file", style = "width: 100%;" })
+                                </div>
+                                <div class="form-group">
+                                    @if (@Model.PartFileName != "")
+                                    {
+                                        <a href="@Url.Content(TempData["UploadPath"].ToString())" data-toggle="lightbox" data-gallery="" data-max-width="1200">
+                                            <img src="@Url.Content(TempData["UploadPath"].ToString())" onerror="this.onerror=null; this.src='@Url.Content(TempData["UploadPath"] + "image_error.png")'" style="height:100px; width:120px;" class="linkCentre" />
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Content(TempData["UploadPath"] +  "no_image.png")" data-toggle="lightbox" data-gallery="" data-max-width="1200">
+                                            <img src="@Url.Content(TempData["UploadPath"] +  "no_image.png")" onerror="this.onerror=null; this.src='@Url.Content(TempData["UploadPath"] + "image_error.png")'" style="height:100px; width:120px;" class="linkCentre" />
+                                        </a>
+                                    }
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                @Html.ActionLink("Back", "Index", "Part", new { }, new { @class = "btn btn-primary btn-sm" })
+                                <button type="submit" class="btn btn-success btn-sm float-right" id="btnEditPart">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@section Styles{
+    @Styles.Render("~/bundles/lightbox/css")
+}
+
+
+@section Scripts{
+    @Scripts.Render("~/bundles/lightbox/script")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Change input to upper case
+            $('.uppercase').blur(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            // Enable lightbox
+            $('[data-toggle="lightbox"]').click(function (e) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });
+
+            // Edit confirmation
+            $("#btnEditPart").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var form = $("#formEditPart");
+
+                if (form.valid()) {
+                    swal.fire({
+                        icon: 'question',
+                        title: 'Save changes?',
+                        text: 'Confirm to edit part?',
+                        showCancelButton: true,
+                        confirmButtonText:
+                            '<i class="fas fa-edit"></i> Edit',
+                        cancelButtonText:
+                            '<i class="fas fa-window-close"></i> Cancel',
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null) {
+                    // Show success msg
+                    if (ViewBag.Status == true){
+                        <text>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: '@ViewBag.Message',
+                                showConfirmButton: true,
+                                timer: 2000,
+                                timerProgressBar: true,
+                            }).then(function () {
+                                if (true) {
+                                    window.location.href = "@Url.Action("Index", "Part")";
+                                }
+                            })
+                        </text>
+                    }
+
+                    // Show error msg
+                    else {
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+
+                    // Set to clear and focus element
+                    if (ViewBag.Message == CommonMsg.DUP_PART)
+                    {
+                        <text>
+                            $('#txtEditPartCode').attr("value", "");
+                            $('#txtEditPartCode').focus();
+                        </text>
+                    }
+                    else if (ViewBag.Message == CommonMsg.INV_PART_MIN_QTY)
+                    {
+                        <text>
+                            $('#txtEditPartMinQty').attr("value", "");
+                            $('#txtEditPartMinQty').focus();
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            $('#txtEditPartCode').focus();
+                        </text>
+                    }
+                }
+            }
+        });
+    </script>
+}

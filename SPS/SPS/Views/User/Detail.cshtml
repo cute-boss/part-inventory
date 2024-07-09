@@ -1,0 +1,91 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* User/Detail.cshtml                                                                                   */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.UserDetailModels
+@{
+    ViewBag.Title = "User Detail";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title [@Model.UserModel.StaffNo]</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "User")">User</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Login Information</h5>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                <strong>@Html.LabelFor(m => m.UserModel.UserName, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.UserModel.UserName)</p>
+                                <strong>@Html.LabelFor(m => m.UserModel.RoleName, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.UserModel.RoleName)</p>
+                                <strong>@Html.LabelFor(m => m.UserModel.IsActive, new { @class = "text-sm" })</strong>
+                                if (Model.UserModel.IsActive)
+                                {
+                                    <div><p class="badge badge-success">Active</p></div>
+                                }
+                                else
+                                {
+                                    <div><p class="badge badge-dark">Inactive</p></div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Staff Information</h5>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                <strong>@Html.LabelFor(m => m.UserModel.StaffNo, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.UserModel.StaffNo)</p>
+                                <strong>@Html.LabelFor(m => m.UserModel.StaffName, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.UserModel.StaffName)</p>
+                                <strong>@Html.LabelFor(m => m.UserModel.Email, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Model.UserModel.Email</p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row pb-3">
+            <div class="col-lg-6">
+                @Html.ActionLink("Back", "Index", "User", new { }, new { @class = "btn btn-primary btn-sm" })
+                @Html.ActionLink("Edit", "Edit", "User", new { id = Model.UserModel.UserId }, new { @class = "btn btn-info btn-sm float-right" })
+            </div>
+        </div>
+    </div>
+</section>

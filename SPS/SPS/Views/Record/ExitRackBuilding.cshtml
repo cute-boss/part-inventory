@@ -1,0 +1,102 @@
+﻿@model SPS.Models.RackBuilding
+@{
+    ViewBag.Title = "Select Rack";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("ExitRackBuilding", "Record", FormMethod.Post, new { id = "formExitRackBuilding", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- card Information -->
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Rack Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RackCode)
+                                    @Html.TextBoxFor(m => m.RackCode, new { @class = "form-control uppercase replace", autofocus = "autofocus", id = "txtExitRackBuildingCode", placeholder = "Please enter rack code" })
+                                    @Html.ValidationMessageFor(m => m.RackCode, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-danger btn-sm float-right" id="btnExitRackBuilding">Out Record</button>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.col -->
+            </div>
+        }
+    </div>
+    <!-- /.container-fluid -->
+</section>
+@section Scripts{
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Replace all ',' comma char to " " empty char
+            $(function () {
+                $(".replace").on("keyup", function () {
+                    var value = $(this).val();
+                    if (value.indexOf(',') != -1) {
+                        $(this).val(value.replace(/\,/g, ""));
+                    }
+                })
+            });
+
+            // Change to input upper case
+            $('.uppercase').blur(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show error msg
+                    if (ViewBag.Status == false){
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+
+        });
+    </script>
+}

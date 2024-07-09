@@ -1,0 +1,100 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Shared/_Layout.cshtml                                                                                */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      14/02/2022  Upd company registration no.                                    Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="return false">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="icon" href="~/Images/sps_icon.png" type="image/x-icon">
+    <title>SPS - @ViewBag.Title</title>
+
+    @Styles.Render("~/content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @RenderSection("Styles", required: false)
+    @Scripts.Render("~/bundles/jquery")
+</head>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper" class="toggled">
+        <div id="loader"></div>
+        <!-- Sidebar -->
+        @{
+            // Load sidebar based on user type
+            if (this.User.IsInRole("ADMIN"))
+            {
+                @Html.Partial("_SideBarAdmin")
+            }
+            else
+            {
+                @Html.Partial("_SideBarUser")
+            }
+        }
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Topbar -->
+                @*Html.Partial("_NavBar")*@
+                @{
+                    Html.RenderAction("Navbar", "Base");
+                }
+                <!-- Begin Page Content -->
+                @RenderBody()
+            </div>
+            <!-- Footer -->
+            <footer class="sticky-footer bg-light">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-1">
+                        <span>
+                            Panasonic System Networks Malaysia Sdn. Bhd. (197801005158 (042154-T))
+                        </span>
+                    </div>
+                    <div class="copyright text-center my-auto">
+                        <span>
+                            ISD &middot; BSS &copy; 2022 - 2023 | @ViewContext.Controller.GetType().Assembly.GetName().Version
+                        </span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    @Scripts.Render("~/bundles/script")
+    @RenderSection("scripts", required: false)
+    <script>
+        // With the element initially shown, just hide it slowly
+        $("#loader").fadeOut("slow");
+
+        // Get session value
+        var refresh = '@Request.RequestContext.HttpContext.Session["IdleTime"]';
+        refresh = refresh * 60 * 1000;
+
+        setTimeout(autoLogout, refresh);
+
+        function autoLogout() {
+            window.location.href = "@Url.Action("AutoLogOff", "Account")";
+        }
+    </script>
+</body>
+</html>

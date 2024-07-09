@@ -1,0 +1,105 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Part/Detail.cshtml                                                                                   */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      30/10/2022  Enlarge image when clicked                                      Azmir               */
+/*      09/03/2023  Add minimum quantity display                                    Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.PartModels
+@{
+    ViewBag.Title = "Part Detail";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Part")">Part</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Part Information</h5>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                <strong>@Html.LabelFor(m => m.PartCode, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.PartCode)</p>
+                                <strong>@Html.LabelFor(m => m.PartName, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.PartName)</p>
+                                <strong>@Html.LabelFor(m => m.PartDesc, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.PartDesc)</p>
+                                <strong>@Html.LabelFor(m => m.PartMinQty, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.PartMinQty)</p>
+                                <strong>@Html.LabelFor(m => m.BalanceQty, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.BalanceQty)</p>
+                                <strong>@Html.LabelFor(m => m.PartFileName, new { @class = "text-sm" })</strong><br />
+                                if (Model.PartGUIDFileName != "")
+                                {
+                                    <a href="@Url.Content(TempData["UploadPath"].ToString())" data-toggle="lightbox" data-gallery="" data-max-width="1200">
+                                        <img src="@Url.Content(TempData["UploadPath"].ToString())" onerror="this.onerror=null; this.src='@Url.Content(TempData["UploadPath"] + "image_error.png")'" style="height:100px; width:120px;" class="linkCentre" />
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@Url.Content(TempData["UploadPath"] +  "no_image.png")" data-toggle="lightbox" data-gallery="" data-max-width="1200">
+                                        <img src="@Url.Content(TempData["UploadPath"] +  "no_image.png")" onerror="this.onerror=null; this.src='@Url.Content(TempData["UploadPath"] + "image_error.png")'" style="height:100px; width:120px;" class="linkCentre" />
+                                    </a>
+                                }
+                            }
+                        </div>
+                        <div class="card-footer">
+                            @Html.ActionLink("Back", "Index", "Part", new { }, new { @class = "btn btn-primary btn-sm" })
+                            @Html.ActionLink("Edit", "Edit", "Part", new { id = Model.PartId }, new { @class = "btn btn-info btn-sm float-right" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles{
+    @Styles.Render("~/bundles/lightbox/css")
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/lightbox/script")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Enable lightbox
+            $('[data-toggle="lightbox"]').click(function (e) {
+                event.preventDefault();
+                $(this).ekkoLightbox();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,1117 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* RptInOut/Index.cshtml                                                                                */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      09/03/2023  Add transfer type and display transfer data                     Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.RptInOutModels
+@{
+    ViewBag.Title = "In/Out Report";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Search -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">In/Out Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.InType)
+                                <br />
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    @Html.CheckBoxFor(m => m.InType, new { @class = "custom-control-input", id = "chkboxInType" })
+                                    @Html.Label("in", "In", new { @class = "custom-control-label", @for = "chkboxInType" })
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    @Html.CheckBoxFor(m => m.OutType, new { @class = "custom-control-input", id = "chkboxOutType" })
+                                    @Html.Label("out", "Out", new { @class = "custom-control-label", @for = "chkboxOutType" })
+                                </div>
+                                <div class="custom-control custom-checkbox custom-control-inline">
+                                    @Html.CheckBoxFor(m => m.TransferType, new { @class = "custom-control-input", id = "chkboxTransferType" })
+                                    @Html.Label("transfer", "Transfer", new { @class = "custom-control-label", @for = "chkboxTransferType" })
+                                </div>
+                                <br />
+                                <span class="field-validation-valid text-danger" data-valmsg-for="OutType" data-valmsg-replace="true" id="Type-validation"></span>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.FromDT, new { @class = "text-sm" })
+                                <div class="input-group dateTime" id="InOutFromDTPicker" data-target-input="nearest">
+                                    @Html.TextBoxFor(m => m.FromDT, new { @class = "form-control datetimepicker-input", id = "InOutFromDT", data_target = "#InOutFromDTPicker", data_toggle = "datetimepicker", required = "required" })
+                                    <div class="input-group-append" data-target="#InOutFromDTPicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.FromDT, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.ToDT, new { @class = "text-sm" })
+                                <div class="input-group dateTime" id="InOutToDTPicker" data-target-input="nearest">
+                                    @Html.TextBoxFor(m => m.ToDT, new { @class = "form-control datetimepicker-input", id = "InOutToDT", data_target = "#InOutToDTPicker", data_toggle = "datetimepicker", required = "required" })
+                                    <div class="input-group-append" data-target="#InOutToDTPicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-calendar-alt"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="field-validation-valid text-danger" data-valmsg-for="ToDT" data-valmsg-replace="true" id="To-validation"></span>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.SearchCategory)
+                                <br />
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    @Html.RadioButtonFor(m => m.SearchCategory, 0, new { id = "InOutSearchCategory", name = "radioBtn", @checked = true, @class = "custom-control-input" })
+                                    @Html.Label("SearchCategory", "Category", new { @class = "custom-control-label", @for = "InOutSearchCategory" })
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    @Html.RadioButtonFor(m => m.SearchCategory, 1, new { id = "InOutSearchPartOnly", name = "radioBtn", @class = "custom-control-input" })
+                                    @Html.Label("SearchPartCode", "Part Only", new { @class = "custom-control-label", @for = "InOutSearchPartOnly" })
+                                </div>
+                            </div>
+                            <fieldset class="border py-2">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        @Html.LabelFor(m => m.BuildingId, new { @class = "text-sm" })
+                                        @Html.DropDownListFor(m => m.BuildingId, Model.BuildingList, "Please select building", new { @class = "form-control select2", id = "cmbboxInOutBuilding", disabled = "true", style = "width: 96%;" })
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="BuildingId" data-valmsg-replace="true" id="Building-validation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.AllBuilding, new { @class = "custom-control-input", id = "chkboxInOutAllBuilding" })
+                                            @Html.LabelFor(m => m.AllBuilding, new { @class = "custom-control-label", @for = "chkboxInOutAllBuilding" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        @Html.LabelFor(m => m.RackId, new { @class = "text-sm" })
+                                        @Html.DropDownListFor(m => m.RackId, Model.RackList, "Please select rack", new { @class = "form-control select2", id = "cmbboxInOutRack", disabled = "true", style = "width: 96%;" })
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="RackId" data-valmsg-replace="true" id="Rack-validation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.AllRack, new { @class = "custom-control-input", id = "chkboxInOutAllRack" })
+                                            @Html.LabelFor(m => m.AllRack, new { @class = "custom-control-label", @for = "chkboxInOutAllRack" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        @Html.LabelFor(m => m.PartId, new { @class = "text-sm" })
+                                        @Html.DropDownListFor(m => m.PartId, Model.PartList, "Please select part", new { @class = "form-control select2", id = "cmbboxInOutPart", disabled = "true", style = "width: 96%;" })
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="PartId" data-valmsg-replace="true" id="Part-validation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.AllPart, new { @class = "custom-control-input", id = "chkboxInOutAllPart" })
+                                            @Html.LabelFor(m => m.AllPart, new { @class = "custom-control-label", @for = "chkboxInOutAllPart" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr />
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.PartId, new { @class = "text-sm" })
+                                @Html.DropDownListFor(m => m.PartId, Model.PartSearchList, "Please select part", new { @class = "form-control select2", id = "cmbboxInOutPartSearch", disabled = "true", style = "width: 100%;" })
+                                <span class="field-validation-valid text-danger" data-valmsg-for="PartId" data-valmsg-replace="true" id="PartSearch-validation"></span>
+                            </div>
+                            <div class="form-group pt-3">
+                                <button type="button" class="btn btn-success btn-sm float-right" id="btnInOutView">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View datatable -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">In/Out List</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="tblRptInOut" class="table table-bordered table-hover text-sm align-center vertical-align">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25px;">No.</th>
+                                        <th>Building</th>
+                                        <th>Rack Code</th>
+                                        <th>Rack</th>
+                                        <th>Part Code</th>
+                                        <th>Part</th>
+                                        <th>Description</th>
+                                        <th style="width: 170px;">Date and Time</th>
+                                        <th style="width: 40px;">Qty.</th>
+                                        <th style="width: 60px;">Status</th>
+                                        <th style="width: 80px;">Record By</th>
+                                        <th>Remark</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/content/datatable/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datatable/script")
+
+<script>
+        $(document).ready(function () {
+
+            $("#chkboxInOutAllRack").attr('disabled', true);
+            $("#chkboxInOutAllPart").attr('disabled', true);
+
+            // Date time picker
+            $('.dateTime').datetimepicker({
+                icons: { time: 'fas fa-clock' },
+                format: "DD-MM-YYYY hh:mm A",
+                date: moment(),
+            });
+
+            // Initialize select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            })
+
+            var $picker = $(".dateTime");
+            $picker.on("change.datetimepicker", function (e) {
+                // After the date is selected, switch to time view automatically
+                if (!e.oldDate && $picker.datetimepicker("useCurrent")) {
+                    // First time ever. If useCurrent option is set to true (default), do nothing
+                    // because the first date is selected automatically
+                    return;
+                }
+                else if (e.oldDate && e.date && (e.oldDate.format("DD-MM-YYYY") === e.date.format("DD-MM-YYYY"))) {
+                    // Date didn't change (time did)
+                    return;
+                }
+
+                setTimeout(function () {
+                    $(".dateTime [data-action='togglePicker']").click();
+                }, 300); // Set a delay so that the animation doesn't fire right-away
+            });
+
+            $('#tblRptInOut').DataTable({
+                "autoWidth": false,
+                "responsive": true,
+                "ordering": false,
+                "pageLength": 100,
+                "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                "columnDefs": [
+                {
+                    "targets": [0],
+                    "orderable": false,
+                    "searchable": false
+                },
+                {
+                    "targets": [6, 11],   // Hide part desc, record remark by default
+                    "visible": false,
+                    "searchable": false
+                }
+                ],
+                "order": [[1, 'asc']],
+            });
+
+            // Clear datatable when clicked
+            $("#chkboxInType").click(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when clicked
+            $("#chkboxOutType").click(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when clicked
+            $("#chkboxTransferType").click(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Checkbox all building
+            $("#chkboxInOutAllBuilding").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxInOutBuilding").attr('disabled', true);
+                    $("#cmbboxInOutRack").attr('disabled', true);
+                    $("#chkboxInOutAllRack").prop('checked', true);
+                    $("#chkboxInOutAllRack").attr('disabled', true);
+                    $("#cmbboxInOutPart").attr('disabled', true);
+                    $("#chkboxInOutAllPart").prop('checked', true);
+                    $("#chkboxInOutAllPart").attr('disabled', true);
+                }
+                else {
+                    $("#cmbboxInOutBuilding").attr('disabled', false);
+                    $("#chkboxInOutAllRack").attr('disabled', false);
+                    $("#chkboxInOutAllPart").attr('disabled', true);
+                }
+
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Checkbox all rack
+            $("#chkboxInOutAllRack").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxInOutRack").attr('disabled', true);
+                    $("#cmbboxInOutPart").attr('disabled', true);
+                    $("#chkboxInOutAllPart").prop('checked', true);
+                    $("#chkboxInOutAllPart").attr('disabled', true);
+                }
+                else {
+                    $("#cmbboxInOutRack").attr('disabled', false);
+                    $("#chkboxInOutAllPart").attr('disabled', false);
+                }
+
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Checkbox all part
+            $("#chkboxInOutAllPart").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxInOutPart").attr('disabled', true);
+                }
+                else {
+                    $("#cmbboxInOutPart").attr('disabled', false);
+                }
+
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Radio button category
+            $("#InOutSearchCategory").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxInOutBuilding").attr('disabled', false);
+                    $("#chkboxInOutAllBuilding").attr('disabled', false);
+                    $("#chkboxInOutAllBuilding:checked").prop('checked', false);
+                    $("#cmbboxInOutRack").attr('disabled', false);
+                    $("#chkboxInOutAllRack").attr('disabled', false);
+                    $("#chkboxInOutAllRack:checked").prop('checked', false);
+                    $("#cmbboxInOutPart").attr('disabled', false);
+                    $("#chkboxInOutAllPart").attr('disabled', false);
+                    $("#chkboxInOutAllPart:checked").prop('checked', false);
+                    $("#cmbboxInOutPartSearch").attr('disabled', true);
+
+                    $('#tblRptInOut').DataTable().clear();
+                    $('#tblRptInOut').DataTable().draw();
+                }
+            });
+
+            // Radio button part only
+            $("#InOutSearchPartOnly").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxInOutBuilding").attr('disabled', true);
+                    $("#chkboxInOutAllBuilding:checked").prop('checked', false);
+                    $("#chkboxInOutAllBuilding").attr('disabled', true);
+                    $("#cmbboxInOutRack").attr('disabled', true);
+                    $("#chkboxInOutAllRack:checked").prop('checked', false);
+                    $("#chkboxInOutAllRack").attr('disabled', true);
+                    $("#cmbboxInOutPart").attr('disabled', true);
+                    $("#chkboxInOutAllPart").attr('disabled', true);
+                    $("#chkboxInOutAllPart:checked").prop('checked', false);
+                    $("#cmbboxInOutPartSearch").attr('disabled', false);
+
+                    $('#tblRptInOut').DataTable().clear();
+                    $('#tblRptInOut').DataTable().draw();
+                }
+            });
+
+            // Get rack based on building selection
+            $("#cmbboxInOutBuilding").change(function () {
+            var buildingId= $(this).val();
+                $.getJSON("@Url.Action("GetRackByBuildingId", "RptInOut")", { iBuildingId: buildingId },
+                function (data) {
+                    var select = $("#cmbboxInOutRack");
+                    select.empty();
+                    select.append($("<option/>", {
+                        value: 0,
+                        text: "Please select rack"
+                    }));
+                    $.each(data, function (index, itemData) {
+                        select.append($("<option/>", {
+                            value: itemData.Value,
+                            text: itemData.Text
+                        }));
+                    });
+                });
+            });
+
+            // Get part based on rack selection
+            $("#cmbboxInOutRack").change(function () {
+                var rackId = $(this).val();
+                $.getJSON("@Url.Action("GetPartByRackId", "RptInOut")", { iRackId: rackId },
+                function (data) {
+                    var select = $("#cmbboxInOutPart");
+                    select.empty();
+                    select.append($("<option/>", {
+                        value: 0,
+                        text: "Please select part"
+                    }));
+                    $.each(data, function (index, itemData) {
+                        select.append($("<option/>", {
+                            value: itemData.Value,
+                            text: itemData.Text
+                        }));
+                    });
+                });
+            });
+
+            // Button view
+            $('#btnInOutView').on('click', function (e) {
+                var from = $('#InOutFromDT').val();
+                var to = $('#InOutToDT').val();
+                var fDate = moment(from, 'DD-MM-YYYY hh:mm A').toDate();
+                var tDate = moment(to, 'DD-MM-YYYY hh:mm A').toDate();
+
+                var iBuildingId = $('#cmbboxInOutBuilding').val();
+                var iRackId = $('#cmbboxInOutRack').val();
+                var iPartId = $('#cmbboxInOutPart').val();
+                var iPartSearchId = $('#cmbboxInOutPartSearch').val();
+                var fromDateTime = from;
+                var toDateTime = to;
+
+                fromDateTime.toJSON = function () { return moment(this).format("DD-MM-YYYY hh:mm A"); }
+                toDateTime.toJSON = function () { return moment(this).format("DD-MM-YYYY hh:mm A"); }
+
+                // Record type validation
+                if ($('#chkboxInType').is(":checked") || $('#chkboxOutType').is(":checked") || $('#chkboxTransferType').is(":checked")) {
+                    $('#Type-validation').html("");
+                    $('#Type-validation').addClass("field-validation-valid");
+                    $('#Type-validation').removeClass("field-validation-error");
+                }
+                else {
+                    $('#Type-validation').html("Record type is required");
+                    $('#Type-validation').removeClass("field-validation-valid");
+                    $('#Type-validation').addClass("field-validation-error");
+                    return;
+                }
+
+                // Date validation
+                if (tDate <= fDate) {
+                    $('#To-validation').html(" Date time 'To' cannot be same or smaller than date time 'From'");
+                    $('#To-validation').removeClass("field-validation-valid");
+                    $('#To-validation').addClass("field-validation-error");
+                    return;
+                }
+                else {
+                    $('#To-validation').html("");
+                    $('#To-validation').addClass("field-validation-valid");
+                    $('#To-validation').removeClass("field-validation-error");
+                }
+
+                // Check if search by category is checked
+                if ($('#InOutSearchCategory').is(":checked")) {
+                    // Building validation
+                    if ((iBuildingId == "" && !$('#chkboxInOutAllBuilding').is(":checked")) || (iBuildingId == 0 && !$('#chkboxInOutAllBuilding').is(":checked"))) {
+                        $('#Building-validation').html("Building is required");
+                        $('#Building-validation').removeClass("field-validation-valid");
+                        $('#Building-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#Building-validation').html("");
+                        $('#Building-validation').addClass("field-validation-valid");
+                        $('#Building-validation').removeClass("field-validation-error");
+                    }
+
+                    // Rack validation
+                    if ((iRackId == "" && !$('#chkboxInOutAllRack').is(":checked")) || (iRackId == 0 && !$('#chkboxInOutAllRack').is(":checked"))) {
+                        $('#Rack-validation').html("Rack is required");
+                        $('#Rack-validation').removeClass("field-validation-valid");
+                        $('#Rack-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#Rack-validation').html("");
+                        $('#Rack-validation').addClass("field-validation-valid");
+                        $('#Rack-validation').removeClass("field-validation-error");
+                    }
+
+                    // Part validation
+                    if ((iPartId == "" && !$('#chkboxInOutAllPart').is(":checked")) || (iPartId == 0 && !$('#chkboxInOutAllPart').is(":checked"))) {
+                        $('#Part-validation').html("Part is required");
+                        $('#Part-validation').removeClass("field-validation-valid");
+                        $('#Part-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#Part-validation').html("");
+                        $('#Part-validation').addClass("field-validation-valid");
+                        $('#Part-validation').removeClass("field-validation-error");
+                    }
+                } else {
+                    // PartSearch validation
+                    if (iPartSearchId == "" || iPartSearchId == 0) {
+                        $('#PartSearch-validation').html("Part is required");
+                        $('#PartSearch-validation').removeClass("field-validation-valid");
+                        $('#PartSearch-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#PartSearch-validation').html("");
+                        $('#PartSearch-validation').addClass("field-validation-valid");
+                        $('#PartSearch-validation').removeClass("field-validation-error");
+                    }
+                }
+
+                // Check if view record type - In and Out and Transfer
+                if ($('#chkboxInType').is(":checked") && $('#chkboxOutType').is(":checked") && $('#chkboxTransferType').is(":checked") ) {
+                    console.log("InOutTransfer");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDt", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDt", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDt", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDt", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } // Check if checkbox part only is checked
+                    else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDt", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } // Check if view record type - In and Out
+                else if ($('#chkboxInType').is(":checked") && $('#chkboxOutType').is(":checked") && $('#chkboxTransferType').not(":checked")) {
+                    console.log("InOut");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDtStatus", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox part only is checked
+                        else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDtStatus", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: false }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } // Check if view record type - Out and Transfer
+                else if ($('#chkboxOutType').is(":checked") && $('#chkboxTransferType').is(":checked") && $('#chkboxInType').not(":checked")) {
+                    console.log("OutTransfer");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDtStatus", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox part only is checked
+                        else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDtStatus", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: false }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } // Check if view record type - In and Transfer
+                else if ($('#chkboxInType').is(":checked") && $('#chkboxTransferType').is(":checked") && $('#chkboxOutType').not(":checked")) {
+                    console.log("InTransfer");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDtStatus", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox part only is checked
+                        else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: false }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDtStatus", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: false }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } // Check if view record type - In
+                else if ($('#chkboxInType').is(":checked") && $('#chkboxOutType').not(":checked") && $('#chkboxTransferType').not(":checked")) {
+                    console.log("In");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDtStatus", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox part only is checked
+                        else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDtStatus", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 1, bEqualStatus: true }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } // Check if view record type - Out
+                else if ($('#chkboxOutType').is(":checked") && $('#chkboxInType').not(":checked") && $('#chkboxTransferType').not(":checked")) {
+                    console.log("Out");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDtStatus", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDtStatus", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 2, bEqualStatus: true }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } // Check if view record type - Transfer
+                else if ($('#chkboxTransferType').is(":checked") && $('#chkboxInType').not(":checked") && $('#chkboxOutType').not(":checked")) {
+                    console.log("Transfer");
+                    // Check if search by category is checked
+                    if ($('#InOutSearchCategory').is(":checked")) {
+                        // Check if checkbox all building is checked
+                        if ($('#chkboxInOutAllBuilding').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordFromDtToDtStatus", "RptInOut")", { sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all rack is checked
+                        else if ($('#chkboxInOutAllRack').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } // Check if checkbox all part is checked
+                        else if ($('#chkboxInOutAllPart').is(":checked")) {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        } else {
+                            $.getJSON("@Url.Action("GetRecordByBuildingIdRackIdPartIdFromDtToDtStatus", "RptInOut")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: true }, function (data) {
+                                DisplayDataTable(data);
+                            }).fail(function () {
+                                Swal.fire({
+                                    icon: 'warning',
+                                    //title: 'Something went wrong!',
+                                    text: 'Failed to view report.',
+                                    showConfirmButton: true,
+                                })
+                            });
+                        }
+                    } else {
+                        $.getJSON("@Url.Action("GetRecordByPartIdFromDtToDtStatus", "RptInOut")", { iPartId: iPartSearchId, sFromDT: fromDateTime, sToDT: toDateTime, iStatus: 3, bEqualStatus: true }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                }
+
+                function DisplayDataTable(data) {
+                    if (data == null) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please contact admin.',
+                            showConfirmButton: true,
+                        })
+                    };
+
+                    if (data == 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'No record is found!',
+                            text: 'Please try again.',
+                            showConfirmButton: true,
+                        })
+                    };
+
+                    // Set datatable datetime format
+                    $.fn.dataTable.moment('DD-MM-YYYY hh:mm A');
+
+                    var table = $("#tblRptInOut").DataTable({
+                        "destroy": true,
+                        "autoWidth": false,
+                        "responsive": true,
+                        "ordering": false,
+                        "pageLength": 100,
+                        "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                        "aaData": data,
+                        "columns": [
+                            { "data": "RecordId" },
+                            { "data": "BuildingName" },
+                            { "data": "RackCode" },
+                            { "data": "RackName" },
+                            { "data": "PartCode" },
+                            { "data": "PartName" },
+                            { "data": "PartDesc" },
+                            { "data": "SRecordDateTime" },
+                            { "data": "RecordQty" },
+                            { "data": "RecordStatus" },
+                            { "data": "RecordBy" },
+                            { "data": "RecordRemark" },
+                        ],
+                        "columnDefs": [
+                            {
+                                "targets": [0],
+                                "orderable": false,
+                                "searchable": false
+                            },
+                            {
+                                // Create in/out badge
+                                "targets": [9],
+                                "data": "RecordStatus",
+                                "render": function (data, type, row) {
+                                    if (row.RecordStatus == 1) {
+                                        return '<span class="badge badge-success">In</span>';
+                                    }
+                                    else if (row.RecordStatus == 2) {
+                                        return '<span class="badge badge-danger">Out</span>';
+                                    }
+                                    else {
+                                        return '<span class="badge badge-primary">Transfer</span>';
+                                    }
+                                }
+                            },
+                            {
+                                "targets": [6, 11],   // Hide part desc, record remark by default
+                                "visible": false,
+                            }],
+                        "order": [[7, 'asc']],
+                        "buttons": [["colvis"], ["excel"]],
+                    });
+                    table.buttons().container().appendTo('#tblRptInOut_wrapper .col-md-6:eq(0)');
+
+                    // Insert row number for each data
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                            table.cell(cell).invalidate('dom');
+                        });
+                    }).draw();
+                }
+            });
+
+            // Clear datatable when combo box building change
+            $('#cmbboxInOutBuilding').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when check box building change
+            $('#chkboxInOutAllBuilding').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when combo box rack change
+            $('#cmbboxInOutRack').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when check box rack change
+            $('#chkboxInOutAllRack').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when combo box part change
+            $('#cmbboxInOutPart').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when check box part change
+            $('#chkboxInOutAllPart').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            // Clear datatable when search by part change
+            $('#cmbboxInOutPartSearch').change(function () {
+                $('#tblRptInOut').DataTable().clear();
+                $('#tblRptInOut').DataTable().draw();
+            });
+
+            @{
+                if (ViewBag.Message != null)
+                {
+                    // Show error msg
+                    if (ViewBag.Status == false)
+                    {
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+        });
+</script>
+}

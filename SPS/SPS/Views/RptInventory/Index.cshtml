@@ -1,0 +1,572 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* RptInventory/Index.cshtml                                                                            */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      14/02/2023  Disabled category input during initial load                     Azmir               */
+/*      09/03/2023  Add minimum qty display                                         Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.RptInventoryModels
+@{
+    ViewBag.Title = "Inventory Report";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Search -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Inventory Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.SearchCategory)
+                                <br />
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    @Html.RadioButtonFor(m => m.SearchCategory, 0, new { id = "IvSearchCategory", name = "radioBtn", @checked = true, @class = "custom-control-input" })
+                                    @Html.Label("SearchCategory", "Category", new { @class = "custom-control-label", @for = "IvSearchCategory" })
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    @Html.RadioButtonFor(m => m.SearchCategory, 1, new { id = "IvSearchPartOnly", name = "radioBtn", @class = "custom-control-input" })
+                                    @Html.Label("SearchPartCode", "Part Only", new { @class = "custom-control-label", @for = "IvSearchPartOnly" })
+                                </div>
+                            </div>
+                            <fieldset class="border py-2">
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        @Html.LabelFor(m => m.BuildingId, new { @class = "text-sm" })
+                                        @Html.DropDownListFor(m => m.BuildingId, Model.BuildingList, "Please select building", new { @class = "form-control select2", id = "cmbboxIvBuilding", disabled = "true", style = "width: 96%;" })
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="BuildingId" data-valmsg-replace="true" id="IvBuilding-validation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.AllBuilding, new { @class = "custom-control-input", id = "chkboxIvAllBuilding" })
+                                            @Html.LabelFor(m => m.AllBuilding, new { @class = "custom-control-label", @for = "chkboxIvAllBuilding" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        @Html.LabelFor(m => m.RackId, new { @class = "text-sm" })
+                                        @Html.DropDownListFor(m => m.RackId, Model.RackList, "Please select rack", new { @class = "form-control select2", id = "cmbboxIvRack", disabled = "true", style = "width: 96%;" })
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="RackId" data-valmsg-replace="true" id="IvRack-validation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.AllRack, new { @class = "custom-control-input", id = "chkboxIvAllRack" })
+                                            @Html.LabelFor(m => m.AllRack, new { @class = "custom-control-label", @for = "chkboxIvAllRack" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        @Html.LabelFor(m => m.PartId, new { @class = "text-sm" })
+                                        @Html.DropDownListFor(m => m.PartId, Model.PartList, "Please select part", new { @class = "form-control select2", id = "cmbboxIvPart", disabled = "true", style = "width: 96%;" })
+                                        <span class="field-validation-valid text-danger" data-valmsg-for="PartId" data-valmsg-replace="true" id="IvPart-validation"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.AllPart, new { @class = "custom-control-input", id = "chkboxIvAllPart" })
+                                            @Html.LabelFor(m => m.AllPart, new { @class = "custom-control-label", @for = "chkboxIvAllPart" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr />
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.PartId, new { @class = "text-sm" })
+                                @Html.DropDownListFor(m => m.PartId, Model.PartSearchList, "Please select part", new { @class = "form-control select2", id = "cmbboxIvPartSearch", disabled = "true", style = "width: 100%;" })
+                                <span class="field-validation-valid text-danger" data-valmsg-for="PartId" data-valmsg-replace="true" id="IvPartSearch-validation"></span>
+                            </div>
+                            <div class="form-group pt-3">
+                                <button type="button" class="btn btn-success btn-sm float-right" id="btnIvView">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View datatable -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Inventory List</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="tblRptIv" class="table table-bordered table-hover text-sm align-center vertical-align">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25px;">No.</th>
+                                        <th>Building</th>
+                                        <th>Rack Code</th>
+                                        <th>Rack</th>
+                                        <th>Part Code</th>
+                                        <th>Part</th>
+                                        <th>Description</th>
+                                        <th style="width: 90px;">Min. Qty.</th>
+                                        <th style="width: 90px;">Part Qty.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/content/datatable/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datatable/script")
+
+<script>
+        $(document).ready(function () {
+
+            $("#chkboxIvAllRack").attr('disabled', true);
+            $("#chkboxIvAllPart").attr('disabled', true);
+
+            // Initialize select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            })
+
+            $('#tblRptIv').DataTable({
+                "autoWidth": false,
+                "responsive": true,
+                "ordering": false,
+                "pageLength": 100,
+                "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                "columnDefs": [{
+                    "targets": [0],
+                    "orderable": false,
+                    "searchable": false
+                }
+                ],
+                "order": [[4, 'asc']],
+            });
+
+            // Checkbox all building
+            $("#chkboxIvAllBuilding").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxIvBuilding").attr('disabled', true);
+                    $("#cmbboxIvRack").attr('disabled', true);
+                    $("#chkboxIvAllRack").prop('checked', true);
+                    $("#chkboxIvAllRack").attr('disabled', true);
+                    $("#cmbboxIvPart").attr('disabled', true);
+                    $("#chkboxIvAllPart").prop('checked', true);
+                    $("#chkboxIvAllPart").attr('disabled', true);
+
+                    //$("#cmbboxIvBuilding").prop("selectedIndex", 0).change();
+                    //$("#cmbboxIvRack").prop("selectedIndex", 0).change();
+                    //$("#cmbboxIvPart").prop("selectedIndex", 0).change();
+                }
+                else {
+                    $("#cmbboxIvBuilding").attr('disabled', false);
+                    $("#chkboxIvAllRack").attr('disabled', false);
+                    $("#chkboxIvAllPart").attr('disabled', true);
+                }
+
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Checkbox all rack
+            $("#chkboxIvAllRack").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxIvRack").attr('disabled', true);
+                    $("#cmbboxIvPart").attr('disabled', true);
+                    $("#chkboxIvAllPart").prop('checked', true);
+                    $("#chkboxIvAllPart").attr('disabled', true);
+                }
+                else {
+                    $("#cmbboxIvRack").attr('disabled', false);
+                    $("#chkboxIvAllPart").attr('disabled', false);
+                }
+
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Checkbox all part
+            $("#chkboxIvAllPart").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxIvPart").attr('disabled', true);
+                }
+                else {
+                    $("#cmbboxIvPart").attr('disabled', false);
+                }
+
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Radio button category
+            $("#IvSearchCategory").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxIvBuilding").attr('disabled', false);
+                    $("#chkboxIvAllBuilding").attr('disabled', false);
+                    $("#chkboxIvAllBuilding:checked").prop('checked', false);
+                    $("#cmbboxIvRack").attr('disabled', false);
+                    $("#chkboxIvAllRack").attr('disabled', false);
+                    $("#chkboxIvAllRack:checked").prop('checked', false);
+                    $("#cmbboxIvPart").attr('disabled', false);
+                    $("#chkboxIvAllPart").attr('disabled', false);
+                    $("#chkboxIvAllPart:checked").prop('checked', false);
+                    $("#cmbboxIvPartSearch").attr('disabled', true);
+
+                    $('#tblRptIv').DataTable().clear();
+                    $('#tblRptIv').DataTable().draw();
+                }
+            });
+
+            // Radio button part only
+            $("#IvSearchPartOnly").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#cmbboxIvBuilding").attr('disabled', true);
+                    $("#chkboxIvAllBuilding:checked").prop('checked', false);
+                    $("#chkboxIvAllBuilding").attr('disabled', true);
+                    $("#cmbboxIvRack").attr('disabled', true);
+                    $("#chkboxIvAllRack:checked").prop('checked', false);
+                    $("#chkboxIvAllRack").attr('disabled', true);
+                    $("#cmbboxIvPart").attr('disabled', true);
+                    $("#chkboxIvAllPart").attr('disabled', true);
+                    $("#chkboxIvAllPart:checked").prop('checked', false);
+                    $("#cmbboxIvPartSearch").attr('disabled', false);
+
+                    $('#tblRptIv').DataTable().clear();
+                    $('#tblRptIv').DataTable().draw();
+                }
+            });
+
+            // Get rack based on building selection
+            $("#cmbboxIvBuilding").change(function () {
+            var buildingId= $(this).val();
+                $.getJSON("@Url.Action("GetRackByBuildingId", "RptInventory")", { iBuildingId: buildingId },
+                function (data) {
+                    var select = $("#cmbboxIvRack");
+                    select.empty();
+                    select.append($("<option/>", {
+                        value: 0,
+                        text: "Please select rack"
+                    }));
+                    $.each(data, function (index, itemData) {
+                        select.append($("<option/>", {
+                            value: itemData.Value,
+                            text: itemData.Text
+                        }));
+                    });
+                });
+            });
+
+            // Get part based on rack selection
+            $("#cmbboxIvRack").change(function () {
+                var rackId = $(this).val();
+                $.getJSON("@Url.Action("GetPartByRackId", "RptInventory")", { iRackId: rackId },
+                function (data) {
+                    var select = $("#cmbboxIvPart");
+                    select.empty();
+                    select.append($("<option/>", {
+                        value: 0,
+                        text: "Please select part"
+                    }));
+                    $.each(data, function (index, itemData) {
+                        select.append($("<option/>", {
+                            value: itemData.Value,
+                            text: itemData.Text
+                        }));
+                    });
+                });
+            });
+
+            // Button view
+            $('#btnIvView').on('click', function (e) {
+                var iBuildingId = $('#cmbboxIvBuilding').val();
+                var iRackId = $('#cmbboxIvRack').val();
+                var iPartId = $('#cmbboxIvPart').val();
+                var iPartSearchId = $('#cmbboxIvPartSearch').val();
+
+                // Check if search by category is checked
+                if ($('#IvSearchCategory').is(":checked")) {
+                    // Building validation
+                    if ((iBuildingId == "" && !$('#chkboxIvAllBuilding').is(":checked")) || (iBuildingId == 0 && !$('#chkboxIvAllBuilding').is(":checked"))) {
+                        $('#IvBuilding-validation').html("Building is required");
+                        $('#IvBuilding-validation').removeClass("field-validation-valid");
+                        $('#IvBuilding-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#IvBuilding-validation').html("");
+                        $('#IvBuilding-validation').addClass("field-validation-valid");
+                        $('#IvBuilding-validation').removeClass("field-validation-error");
+                    }
+
+                    // Rack validation
+                    if ((iRackId == "" && !$('#chkboxIvAllRack').is(":checked")) || (iRackId == 0 && !$('#chkboxIvAllRack').is(":checked"))) {
+                        $('#IvRack-validation').html("Rack is required");
+                        $('#IvRack-validation').removeClass("field-validation-valid");
+                        $('#IvRack-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#IvRack-validation').html("");
+                        $('#IvRack-validation').addClass("field-validation-valid");
+                        $('#IvRack-validation').removeClass("field-validation-error");
+                    }
+
+                    // Part validation
+                    if ((iPartId == "" && !$('#chkboxIvAllPart').is(":checked")) || (iPartId == 0 && !$('#chkboxIvAllPart').is(":checked"))) {
+                        $('#IvPart-validation').html("Part is required");
+                        $('#IvPart-validation').removeClass("field-validation-valid");
+                        $('#IvPart-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#IvPart-validation').html("");
+                        $('#IvPart-validation').addClass("field-validation-valid");
+                        $('#IvPart-validation').removeClass("field-validation-error");
+                    }
+                } else {
+                    // PartSearch validation
+                    if (iPartSearchId == "" || iPartSearchId == 0) {
+                        $('#IvPartSearch-validation').html("Part is required");
+                        $('#IvPartSearch-validation').removeClass("field-validation-valid");
+                        $('#IvPartSearch-validation').addClass("field-validation-error");
+                        return;
+                    }
+                    else {
+                        $('#IvPartSearch-validation').html("");
+                        $('#IvPartSearch-validation').addClass("field-validation-valid");
+                        $('#IvPartSearch-validation').removeClass("field-validation-error");
+                    }
+                }
+
+                // Check if search by category is checked
+                if ($('#IvSearchCategory').is(":checked")) {
+                    // Check if checkbox all building is checked
+                    if ($('#chkboxIvAllBuilding').is(":checked")) {
+                        $.getJSON("@Url.Action("GetInventoryList", "RptInventory")", { }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    } // Check if checkbox all rack is checked
+                    else if ($('#chkboxIvAllRack').is(":checked")) {
+                        $.getJSON("@Url.Action("GetInventoryByBuildingId", "RptInventory")", { iBuildingId: iBuildingId }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                    // Check if checkbox all part is checked
+                    else if ($('#chkboxIvAllPart').is(":checked")) {
+                        $.getJSON("@Url.Action("GetInventoryByBuildingIdRackId", "RptInventory")", { iBuildingId: iBuildingId, iRackId: iRackId }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    } else {
+                        $.getJSON("@Url.Action("GetInventoryByBuildingIdRackIdPartId", "RptInventory")", { iBuildingId: iBuildingId, iRackId: iRackId, iPartId: iPartId }, function (data) {
+                            DisplayDataTable(data);
+                        }).fail(function () {
+                            Swal.fire({
+                                icon: 'warning',
+                                //title: 'Something went wrong!',
+                                text: 'Failed to view report.',
+                                showConfirmButton: true,
+                            })
+                        });
+                    }
+                } else {
+                    $.getJSON("@Url.Action("GetInventoryByPartId", "RptInventory")", { iPartId: iPartSearchId }, function (data) {
+                        DisplayDataTable(data);
+                    }).fail(function () {
+                        Swal.fire({
+                            icon: 'warning',
+                            //title: 'Something went wrong!',
+                            text: 'Failed to view report.',
+                            showConfirmButton: true,
+                        })
+                    });
+                }
+
+                function DisplayDataTable(data) {
+                    if (data == null) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please contact admin.',
+                            showConfirmButton: true,
+                        })
+                    };
+
+                    if (data == 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'No record is found!',
+                            text: 'Please try again.',
+                            showConfirmButton: true,
+                        })
+                    };
+
+                    // Set datatable datetime format
+                    $.fn.dataTable.moment('DD-MM-YYYY hh:mm A');
+
+                    var table = $("#tblRptIv").DataTable({
+                        "destroy": true,
+                        "autoWidth": false,
+                        "responsive": true,
+                        "ordering": false,
+                        "pageLength": 100,
+                        "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                        "aaData": data,
+                        "columns": [
+                            { "data": "PartId" },
+                            { "data": "BuildingName" },
+                            { "data": "RackCode" },
+                            { "data": "RackName" },
+                            { "data": "PartCode" },
+                            { "data": "PartName" },
+                            { "data": "PartDesc" },
+                            { "data": "PartMinQty" },
+                            { "data": "PartQty" },
+                        ],
+                        "columnDefs": [
+                        {
+                            "targets": [0],
+                            "orderable": false,
+                            "searchable": false
+                        }
+                        ],
+                        "order": [[1, 'asc']],
+                        "buttons": [["colvis"], ["excel"]],
+                    });
+                    table.buttons().container().appendTo('#tblRptIv_wrapper .col-md-6:eq(0)');
+
+                    // Insert row number for each data
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                            table.cell(cell).invalidate('dom');
+                        });
+                    }).draw();
+                }
+            });
+
+            // Clear datatable when combo box building change
+            $('#cmbboxIvBuilding').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Clear datatable when check box building change
+            $('#chkboxIvAllBuilding').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Clear datatable when combo box rack change
+            $('#cmbboxIvRack').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Clear datatable when check box rack change
+            $('#chkboxIvAllRack').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Clear datatable when combo box part change
+            $('#cmbboxIvPart').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Clear datatable when check box part change
+            $('#chkboxIvAllPart').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            // Clear datatable when search by part change
+            $('#cmbboxIvPartSearch').change(function () {
+                $('#tblRptIv').DataTable().clear();
+                $('#tblRptIv').DataTable().draw();
+            });
+
+            @{
+                if (ViewBag.Message != null)
+                {
+                    // Show error msg
+                    if (ViewBag.Status == false)
+                    {
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+        });
+</script>
+}

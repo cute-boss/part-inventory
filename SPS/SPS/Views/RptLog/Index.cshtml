@@ -1,0 +1,272 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* RptLog/Index.cshtml                                                                                  */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.RptLogModels
+@{
+    ViewBag.Title = "Log Report";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <!-- Search -->
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Log Information</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.StartDateTime, new { @class = "text-sm" })
+                                <div class="input-group dateTime" id="LogStartDTPicker" data-target-input="nearest">
+                                    @Html.TextBoxFor(m => m.StartDateTime, new { @class = "form-control datetimepicker-input", id = "LogStartDT", data_target = "#LogStartDTPicker", data_toggle = "datetimepicker", required = "required" })
+                                    <div class="input-group-append" data-target="#LogStartDTPicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                                @Html.ValidationMessageFor(m => m.StartDateTime, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.EndDateTime, new { @class = "text-sm" })
+                                <div class="input-group dateTime" id="LogEndDTPicker" data-target-input="nearest">
+                                    @Html.TextBoxFor(m => m.EndDateTime, new { @class = "form-control datetimepicker-input", id = "LogEndDT", data_target = "#LogEndDTPicker", data_toggle = "datetimepicker", required = "required" })
+                                    <div class="input-group-append" data-target="#LogEndDTPicker" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar-alt"></i></div>
+                                    </div>
+                                </div>
+                                <span class="field-validation-valid text-danger" data-valmsg-for="EndDateTime" data-valmsg-replace="true" id="end-validation"></span>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(m => m.LogTypeId, new { @class = "text-sm" })
+                                @Html.DropDownListFor(m => m.LogTypeId, Model.LogTypeList, "Please select log type", new { @class = "form-control select2", id = "cmbboxLogType", style = "width: 100%;" })
+                                @Html.ValidationMessageFor(m => m.LogTypeId, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group pt-3">
+                                <button type="button" class="btn btn-success btn-sm float-right" id="btnLogView">View</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- View datatable -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Log List</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="tblLog" class="table table-bordered table-hover text-sm">
+                                <thead>
+                                    <tr>
+                                        <th style="text-align: center; width: 25px;">No.</th>
+                                        <th style="text-align: center; width: 170px;">Date and Time</th>
+                                        <th style="text-align: center; width: 130px;">Log Type</th>
+                                        <th style="text-align: center;">Description</th>
+                                        <th style="text-align: center; width: 80px;">User</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles {
+    @Styles.Render("~/content/datatable/css")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/datatable/script")
+
+    <script>
+        $(document).ready(function () {
+
+            // Date time picker
+            $('.dateTime').datetimepicker({
+                icons: { time: 'fas fa-clock' },
+                format: "DD-MM-YYYY hh:mm A",
+                date: moment(),
+            });
+
+            // Initialize select2
+            $('.select2').select2({
+                theme: 'bootstrap4'
+            })
+
+            var $picker = $(".dateTime");
+            $picker.on("change.datetimepicker", function (e) {
+                // After the date is selected, switch to time view automatically
+                if (!e.oldDate && $picker.datetimepicker("useCurrent")) {
+                    // First time ever. If useCurrent option is set to true (default), do nothing
+                    // because the first date is selected automatically
+                    return;
+                }
+                else if (e.oldDate && e.date && (e.oldDate.format("DD-MM-YYYY") === e.date.format("DD-MM-YYYY"))) {
+                    // Date didn't change (time did)
+                    return;
+                }
+
+                setTimeout(function () {
+                    $(".dateTime [data-action='togglePicker']").click();
+                }, 300); // Set a delay so that the animation doesn't fire right-away
+            });
+
+            $('#tblLog').DataTable({
+                "autoWidth": false,
+                "responsive": true,
+                "ordering": false,
+                "pageLength": 100,
+                "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                "order": [[1, 'asc']],
+            });
+
+            // Button view
+            $('#btnLogView').on('click', function (e) {
+                var start = $('#LogStartDT').val();
+                var end = $('#LogEndDT').val()
+                var sDate = moment(start, 'DD-MM-YYYY hh:mm A').toDate();
+                var eDate = moment(end, 'DD-MM-YYYY hh:mm A').toDate();
+                var validate = $('#end-validation');
+
+                if (eDate <= sDate) {
+                    validate.html("End date time cannot be same or smaller than start date time");
+                    validate.removeClass("field-validation-valid");
+                    validate.addClass("field-validation-error");
+                    return;
+                }
+                else {
+                    validate.html("");
+                    validate.addClass("field-validation-valid");
+                    validate.removeClass("field-validation-error");
+                }
+
+                var logTypeId = $('#cmbboxLogType').val();
+                var startDateTime = JSON.stringify($('#LogStartDT').val());
+                var endDateTime = JSON.stringify($('#LogEndDT').val());
+
+                $.getJSON("@Url.Action("GetLog", "RptLog")", { iLogTypeId: logTypeId, sStartDateTime: startDateTime, sEndDateTime: endDateTime }, function (data) {
+                    if (data == null) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Please contact admin.',
+                            showConfirmButton: true,
+                        })
+                    };
+
+                    if (data == 0) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'No log is found!',
+                            text: 'Please try again.',
+                            showConfirmButton: true,
+                        })
+                    };
+
+                    // Set datatable datetime format
+                    $.fn.dataTable.moment('DD-MM-YYYY hh:mm A');
+
+                    var table = $("#tblLog").DataTable({
+                        "destroy": true,
+                        "autoWidth": false,
+                        "ordering": false,
+                        "pageLength": 100,
+                        "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                        "aaData": data,
+                        "columns": [
+                            { "data": "LogId" },
+                            { "data": "SLogTime" },
+                            { "data": "LogTypeName" },
+                            { "data": "LogDesc" },
+                            { "data": "UserName" },
+                        ],
+                        "columnDefs": [
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        }],
+                        "order": [[1, 'asc']],
+                        "buttons": [["colvis"], ["excel"]],
+                    });
+                    table.buttons().container().appendTo('#tblLog_wrapper .col-md-6:eq(0)');
+
+                    // Insert row number for each data
+                    table.on('order.dt search.dt', function () {
+                        table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                            cell.innerHTML = i + 1;
+                            table.cell(cell).invalidate('dom');
+                        });
+                    }).draw();
+                }).fail(function () {
+                    Swal.fire({
+                        icon: 'warning',
+                        //title: 'Something went wrong!',
+                        text: 'Failed to view log.',
+                        showConfirmButton: true,
+                    })
+                });
+            });
+
+            // Clear datatable when combo box change
+            $('#cmbboxLogType').change(function () {
+                $('#tblLog').DataTable().clear();
+                $('#tblLog').DataTable().draw();
+            });
+
+            @{
+                if (ViewBag.Message != null)
+                {
+                    // Show error msg
+                    if (ViewBag.Status == false)
+                    {
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+        });
+    </script>
+}

@@ -1,0 +1,249 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Record/Import.cshtml                                                                                 */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.RecordImportModels
+@{
+    ViewBag.Title = "Import Record";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content-header -->
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Import", "Record", FormMethod.Post, new { id = "formImportRecord", enctype = "multipart/form-data", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- card Information -->
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Import Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.TemplateFile)<br />
+                                    @Html.ActionLink("Template Link", "Import", "Record", null, new { onclick = "return Getfile()" })<br />
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.ImportFile)<br />
+                                    @Html.TextBoxFor(m => m.ImportFile, new { id = "FileUpload", name = "FileUpload", type = "file", accept = ".csv, text/csv", style = "width:100%" })<br />
+                                    <span class="field-validation-valid text-danger" data-valmsg-for="FileUpload" data-valmsg-replace="true" id="FileUpload-validation"></span>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                @Html.ActionLink("Back", "Index", "Record", new { }, new { @class = "btn btn-primary btn-sm" })
+                                <button type="submit" class="btn btn-success btn-sm float-right" id="btnImportRecord">Import</button>
+                            </div>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.col -->
+                <!--Table shipment-->
+                <div class="col-lg-12">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Error List</h5>
+                        </div>
+                        <div class="card-body">
+                            <!--Table Import-->
+                            <table id="tblError" class="table table-bordered table-hover nowrap text-sm align-center vertical-align" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25px">No.</th>
+                                        <th style="width: 100px">@Html.DisplayNameFor(m => m.ImportErrorModel.ErrorRow)</th>
+                                        <th>@Html.DisplayNameFor(m => m.ImportErrorModel.Error)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.ImportErrorListModel != null)
+                                    {
+                                        foreach (var m in Model.ImportErrorListModel)
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                <td style="text-align: center; width: 35px">@m.ErrorRow</td>
+                                                <td>@m.Error</td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.Table Import -->
+            </div>
+            <!-- /.row -->
+        }
+    </div>
+    <!-- /.container-fluid -->
+</section>
+
+@section Styles{
+    @Styles.Render("~/content/datatable/css")
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/datatable/script")
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Display responsive datatable
+            var table = $('#tblError').DataTable({
+                "autoWidth": false,
+                "responsive": true,
+                "pageLength": 100,
+                "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                "columnDefs": [{
+                    "searchable": false,    // disable search
+                    "orderable": false,     // disable sort
+                    "targets": 0            // first column index 'no'
+                }],
+                //"order": [[1, 'asc']],      // sort column[1] by ascending order
+            });
+
+            // Insert row number for each data
+            table.on('order.dt search.dt', function () {
+                table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            // Add confirmation
+            $("#btnImportRecord").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var valid = FileValidation();
+                if (!valid) {
+                    return;
+                }
+
+                var form = $("#formImportRecord");
+                if (form.valid()) {
+                    swal.fire({
+                        icon: 'question',
+                        title: 'Are you sure?',
+                        text: 'Confirm to import record?',
+                        showCancelButton: true,
+                        confirmButtonText:
+                            '<i class="fas fa-plus-square"></i> Add',
+                        cancelButtonText:
+                            '<i class="fas fa-window-close"></i> Cancel',
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show success msg
+                    if (ViewBag.Status == true){
+                        <text>
+                            Swal.fire({
+                                icon: 'success',
+                                title: '@ViewBag.Message',
+                                text: '@ViewBag.MessageDetails',
+                                showConfirmButton: true,
+                                timer: 3000,
+                                timerProgressBar: true,
+                            }).then(function () {
+                                if (true) {
+                                    window.location.href = "@Url.Action("Index", "Record")";
+                                }
+                            })
+                        </text>
+                    }
+                    // Show error msg
+                    else{
+                        <text>
+                            toastr.error(
+                                "@ViewBag.MessageDetails",
+                                "@ViewBag.Message",
+                                {
+                                    positionClass: "toast-top-right",
+                                    timeOut: 0,
+                                    //extendedTimeOut: 0,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+
+        });
+
+        // Get template file
+        function Getfile() {
+            window.open('@Url.Action("DownloadTemplate", "Record")')
+        }
+
+        // Check validation
+        function FileValidation() {
+            var valid = true;
+            var uploadField = document.getElementById("FileUpload");
+            var fileImport = false;
+            var fileName = $('#FileUpload').val();
+
+            if (jQuery.trim(fileName).length > 0) {
+                fileImport = true;
+            }
+
+            var validate = $('#FileUpload-validation');
+
+            if (fileImport) {
+                if ((uploadField.files[0].name.indexOf(".csv") == -1) && (uploadField.files[0].name.indexOf(".CSV") == -1)) {
+                    validate.html("Invalid file type");
+                    validate.removeClass("field-validation-valid");
+                    validate.addClass("field-validation-error");
+                    this.value = "";
+                    valid = false;
+                }
+            }
+            else {
+                validate.html("File is required");
+                validate.removeClass("field-validation-valid");
+                validate.addClass("field-validation-error");
+                this.value = "";
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
+}

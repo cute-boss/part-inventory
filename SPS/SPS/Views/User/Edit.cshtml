@@ -1,0 +1,199 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* User/Edit.cshtml                                                                                     */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.UserEditModels
+@{
+    ViewBag.Title = "Edit User";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title [@Model.UserModel.StaffNo]</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "User")">User</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Edit", "User", FormMethod.Post, new { id = "formEditUser", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.UserModel.UserId)
+            @Html.HiddenFor(m => m.UserModel.OldStaffNo)
+            @Html.HiddenFor(m => m.UserModel.OldEmail)
+            @Html.HiddenFor(m => m.UserModel.OldRoleName)
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Login Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserModel.UserName, new { @class = "text-sm" })
+                                    @Html.TextBoxFor(m => m.UserModel.UserName, new { @class = "form-control uppercase", autofocus = "autofocus", placeholder = "Please enter username", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.UserModel.UserName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserModel.RoleName, new { @class = "text-sm" })
+                                    @Html.DropDownListFor(m => m.UserModel.RoleName, Model.RoleList, "Please select role", new { @class = "form-control select2" })
+                                    @Html.ValidationMessageFor(m => m.UserModel.RoleName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(m => m.UserModel.IsActive, new { @class = "custom-control-input", id = "chkboxStatus" })
+                                            @Html.LabelFor(m => m.UserModel.IsActive, new { @class = "custom-control-label", @for = "chkboxStatus" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Staff Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserModel.StaffNo, new { @class = "text-sm" })
+                                    @Html.TextBoxFor(m => m.UserModel.StaffNo, new { @class = "form-control uppercase", placeholder = "Please enter staff no.", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(m => m.UserModel.StaffNo, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserModel.StaffName, new { @class = "text-sm" })
+                                    @Html.TextBoxFor(m => m.UserModel.StaffName, new { @class = "form-control uppercase", placeholder = "Please enter staff name" })
+                                    @Html.ValidationMessageFor(m => m.UserModel.StaffName, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.UserModel.Email, new { @class = "text-sm" })
+                                    @Html.TextBoxFor(m => m.UserModel.Email, new { @class = "form-control lowercase", placeholder = "Please enter email address" })
+                                    @Html.ValidationMessageFor(m => m.UserModel.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-lg-6">
+                    @Html.ActionLink("Back", "Index", "User", new { }, new { @class = "btn btn-primary btn-sm" })
+                    <button type="submit" class="btn btn-success btn-sm float-right" id="btnEditUser">Edit</button>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Initialize select2
+            $('.select2').select2({
+                minimumResultsForSearch: Infinity,
+                theme: 'bootstrap4'
+            })
+
+            $('select').on('change', function () {
+                $(this).find('option:selected').attr("selected", "selected");
+            });
+
+            // Change to input upper case
+            $('.uppercase').blur(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            // Change to input lower case
+            $('.lowercase').blur(function () {
+                $(this).val($(this).val().toLowerCase());
+            });
+
+            // Edit user confirmation
+            $("#btnEditUser").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var form = $("#formEditUser");
+                if (form.valid()) {
+                    swal.fire({
+                        icon: 'question',
+                        title: 'Save changes?',
+                        text: 'Confirm to edit user?',
+                        showCancelButton: true,
+                        confirmButtonText:
+                            '<i class="fas fa-edit"></i> Edit',
+                        cancelButtonText:
+                            '<i class="fas fa-window-close"></i> Cancel',
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show success msg
+                    if (ViewBag.Status == true){
+                        <text>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: '@ViewBag.Message',
+                                showConfirmButton: true,
+                                timer: 2000,
+                                timerProgressBar: true,
+                            }).then(function () {
+                                if (true) {
+                                    window.location.href = "@Url.Action("Index", "User")";
+                                }
+                            })
+                        </text>
+                    }
+                    // Show error msg
+                    else{
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+
+        });
+    </script>
+}

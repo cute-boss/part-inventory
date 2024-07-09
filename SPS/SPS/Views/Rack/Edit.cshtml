@@ -1,0 +1,169 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Rack/Edit.cshtml                                                                                     */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      14/02/2023  Add focus to rack code when error                               Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@using SPSLib
+@model SPS.Models.RackModels
+@{
+    ViewBag.Title = "Edit Rack";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Rack")">Rack</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Edit", "Rack", FormMethod.Post, new { id = "formEditRack", autocomplete = "off" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.RackId)
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline ">
+                            <div class="card-header py-3">
+                                <h5 class="m-0 card-title font-weight-bold text-dark">Rack Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.BuildingId)
+                                    <p class="text-muted">@Html.DisplayFor(m => m.BuildingName)</p>
+                                </div>
+                                <hr />
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RackCode)
+                                    @Html.TextBoxFor(m => m.RackCode, new { @class = "form-control uppercase replace", autofocus = "autofocus", placeholder = "Please enter rack code" })
+                                    @Html.ValidationMessageFor(m => m.RackCode, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(m => m.RackName)
+                                    @Html.TextBoxFor(m => m.RackName, new { @class = "form-control uppercase", placeholder = "Please enter rack name" })
+                                    @Html.ValidationMessageFor(m => m.RackName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                @Html.ActionLink("Back", "Index", "Rack", new { @BuildingId = Model.BuildingId }, new { @class = "btn btn-primary btn-sm" })
+                                <button type="submit" class="btn btn-info btn-sm float-right" id="btnEditRack">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Change to input upper case
+            $('.uppercase').blur(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+
+            // Add confirmation
+            $("#btnEditRack").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                var form = $("#formEditRack");
+                if (form.valid()) {
+                    swal.fire({
+                        icon: 'question',
+                        title: 'Save changes?',
+                        text: 'Confirm to edit rack?',
+                        showCancelButton: true,
+                        confirmButtonText:
+                            '<i class="fas fa-edit"></i> Edit',
+                        cancelButtonText:
+                            '<i class="fas fa-window-close"></i> Cancel',
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    })
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show success msg
+                    if (ViewBag.Status == true){
+                        <text>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: '@ViewBag.Message',
+                                showConfirmButton: true,
+                                timer: 2000,
+                                timerProgressBar: true,
+                            }).then(function () {
+                                if (true) {
+                                    window.location.href = "@Url.Action("Index", "Rack")";
+                                }
+                            })
+                        </text>
+                    }
+                    // Show error msg
+                    else{
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+
+                    // Set to clear and focus element
+                    if (ViewBag.Message == CommonMsg.DUP_RACK)
+                    {
+                        <text>
+                            $('#txtAddRackCode').attr("value", "");
+                            $('#txtAddRackCode').focus();
+                        </text>
+                    }
+                    else
+                    {
+                        <text>
+                            $('#txtAddRackCode').focus();
+                        </text>
+                    }
+                }
+            }
+        });
+    </script>
+}

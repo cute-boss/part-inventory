@@ -1,0 +1,137 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Account/Login.cshtml                                                                                 */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      09/03/2023  Add autocomplete func to textbox                                Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.LoginModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<div class="container">
+
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
+
+        <!-- Card size -->
+        <div class="col-xl-5 col-lg-5 col-md-5">
+
+            @using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <i class="fas fa-unlock-alt fa-5x"></i>
+                                <br />
+                                <br />
+                                <h1 class="h4 text-gray-900 mb-4">Login</h1>
+                            </div>
+                            <div class="input-group">
+                                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", autofocus = "autofocus", placeholder = "Username", autocomplete = "off" })
+
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                @Html.ValidationMessageFor(m => m.UserName, "", new { @class = "invalid-feedback d-block" })
+                            </div>
+
+                            <div class="input-group">
+                                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Password", autocomplete = "off" })
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "invalid-feedback d-block" })
+                            </div>
+
+                            <div>
+                                <div class="pb-1">
+                                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                </div>
+                                <div class="text-center text-md">
+                                    @Html.ActionLink("Forgot password", "ForgotPassword")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+    $(document).ready(function () {
+
+        // Display toastr message
+        @if (ViewBag.Message != null){
+            <text>
+                toastr.error(
+                    "@ViewBag.Message",
+                    "",
+                    {
+                        positionClass: "toast-top-right",
+                        showDuration: 300,
+                        hideDuration: 1000,
+                        timeOut: 3000,
+                    }
+                );
+            </text>
+        }
+
+        // Display alert message for session
+        @if (ViewBag.AlertMsg != null){
+        <text>
+            toastr.warning(
+                "@ViewBag.AlertMsg",
+                "",
+                {
+                    positionClass: "toast-top-right",
+                    showDuration: 300,
+                    hideDuration: 1000,
+                    timeOut: 5000,
+                }
+            );
+        </text>
+        }
+
+        @if (TempData["Logout"] != null){
+        <text>
+            swal.fire({
+                icon: 'info',
+                //title: 'Logout',
+                html: 'You have logged out successfully.',
+                showCancelButton: false,
+                confirmButtonText: 'OK',
+                timer: 5000,
+                timerProgressBar: true
+            })
+        </text>
+        }
+    });
+    </script>
+}

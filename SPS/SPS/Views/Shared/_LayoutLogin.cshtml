@@ -1,0 +1,66 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Shared/_LayoutLogin.cshtml                                                                           */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      14/02/2022  Upd company registration no.                                    Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+<!DOCTYPE html>
+<html lang="en" oncontextmenu="return false">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link rel="icon" href="~/Images/sps_icon.png" type="image/x-icon">
+    <title>SPS - @ViewBag.Title</title>
+
+    @Styles.Render("~/content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column" style="background-color: white">
+            <!-- Main Content -->
+            <div id="content">
+                <!-- Begin Page Content -->
+                @RenderBody()
+            </div>
+            <!-- Main Footer -->
+            <footer class="main-footer small">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-1">
+                        <span>
+                            Panasonic System Networks Malaysia Sdn. Bhd. (197801005158 (042154-T))
+                        </span>
+                    </div>
+                    <div class="copyright text-center my-auto">
+                        <span>
+                            ISD &middot; BSS &copy; 2022 - 2023 | @ViewContext.Controller.GetType().Assembly.GetName().Version
+                        </span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/script")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

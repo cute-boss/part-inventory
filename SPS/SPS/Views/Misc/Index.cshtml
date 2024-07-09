@@ -1,0 +1,254 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Miscellaneous/Index.cshtml                                                                           */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      09/03/2023  Remove autocomplete func from textbox                           Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.MiscModels
+@{
+    ViewBag.Title = "Miscellaneous";
+}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        @using (Html.BeginForm("Index", "Misc", FormMethod.Post, new { @id = "formEditMiscellaneous", @class = "form-horizontal form-label-left", autocomplete = "off", novalidate = "" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <div class="card shadow mb-4">
+                        <div class="card card-primary card-outline card-tabs">
+                            <div class="card-header p-0 pt-1 border-bottom-0">
+                                <ul class="nav nav-tabs" id="misc-tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="misc-tabs-general-tab" data-toggle="pill" href="#misc-tabs-general" role="tab" aria-controls="misc-tabs-general" aria-selected="true">General</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="misc-tabs-email-tab" data-toggle="pill" href="#misc-tabs-email" role="tab" aria-controls="misc-tabs-email" aria-selected="false">Email</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="misc-tabs-tabContent">
+                                    <!-- General tab -->
+                                    <div class="tab-pane fade show active" id="misc-tabs-general" role="tabpanel" aria-labelledby="misc-tabs-general-tab">
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.RetentionPeriod, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.RetentionPeriod, new { @class = "form-control", type = "number", min = "1", max = "10" })
+                                            @Html.ValidationMessageFor(model => model.RetentionPeriod, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.AttachmentSize, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.AttachmentSize, new { @class = "form-control", @type = "number", @min = "1", @max = "10" })
+                                            @Html.ValidationMessageFor(model => model.AttachmentSize, "", new { @class = "text-danger" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.IdleTime, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.IdleTime, new { @class = "form-control", type = "number", min = "5", max = "15" })
+                                            @Html.ValidationMessageFor(model => model.IdleTime, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.TokenResetTime, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.TokenResetTime, new { @class = "form-control", type = "number", min = "5", max = "15" })
+                                            @Html.ValidationMessageFor(model => model.TokenResetTime, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.DefaultEmail, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.DefaultEmail, new { @class = "form-control lowercase", placeholder = "Please enter default email" })
+                                            @Html.ValidationMessageFor(model => model.DefaultEmail, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                    </div>
+                                    <!-- Email tab -->
+                                    <div class="tab-pane fade" id="misc-tabs-email" role="tabpanel" aria-labelledby="misc-tabs-email-tab">
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox">
+                                                @Html.CheckBoxFor(m => m.UseEmail, new { @class = "custom-control-input", id = "UseEmail" })
+                                                @Html.LabelFor(m => m.UseEmail, new { @class = "custom-control-label", @for = "UseEmail" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmailSmtp, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.EmailSmtp, new { @class = "form-control", id = "Smtp", placeholder = "Please enter SMTP server" })
+                                            @Html.ValidationMessageFor(model => model.EmailSmtp, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmailPort, new { @class = "text-sm" })
+                                            @Html.TextBoxFor(m => m.EmailPort, new { @class = "form-control", id = "Port", type = "number", min = "1", max = "65535", placeholder = "Please enter port no." })
+                                            @Html.ValidationMessageFor(model => model.EmailPort, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmailProtocol, new { @class = "text-sm" })
+                                            @Html.DropDownListFor(m => m.EmailProtocol, Model.EmailProtocolList, new { @class = "form-control select2", id = "Protocol", style = "width: 100%" })
+                                            @Html.ValidationMessageFor(model => model.EmailProtocol, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmailUsername)
+                                            @Html.TextBoxFor(m => m.EmailUsername, new { @class = "form-control", id = "Username", placeholder = "Please enter username" })
+                                            @Html.ValidationMessageFor(model => model.EmailUsername, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                        <div class="form-group">
+                                            @Html.LabelFor(m => m.EmailPassword, new { @class = "text-sm" })
+                                            @Html.PasswordFor(m => m.EmailPassword, new { @class = "form-control", id = "Password", placeholder = "Please enter password", autocomplete = "off", })
+                                            @Html.ValidationMessageFor(model => model.EmailPassword, "", new { @class = "invalid-feedback d-block" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-success btn-sm float-right" id="btnEditMiscellaneous">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            // Initialize select2
+            $('.select2').select2({
+                minimumResultsForSearch: Infinity,
+                theme: 'bootstrap4'
+            })
+
+            // Change to input lower case
+            $('.lowercase').blur(function () {
+                $(this).val($(this).val().toLowerCase());
+            });
+
+            // Enabled/Disabled email upon load
+            $(function () {
+                EnableDisable($("[id*=UseEmail]"));
+            })
+
+            function EnableDisable(element) {
+                if ($(element).is(':checked')) {
+                    $('#Smtp').removeAttr('disabled');
+                    $('#Port').removeAttr('disabled');
+                    $('#Protocol').removeAttr('disabled');
+                    $('#Username').removeAttr('disabled');
+                    $('#Password').removeAttr('disabled');
+
+                } else {
+                    $('#Smtp').attr('disabled', 'disabled');
+                    $('#Port').attr('disabled', 'disabled');
+                    $('#Protocol').attr('disabled', 'disabled');
+                    $('#Username').attr('disabled', 'disabled');
+                    $('#Password').attr('disabled', 'disabled');
+                }
+            }
+
+            // Disable/Enabled useEmail when clicked
+            $("#UseEmail").click(function () {
+                if ($(this).is(":checked")) {
+                    $("#Smtp").attr('disabled', false);
+                    $("#Port").attr('disabled', false);
+                    $("#Protocol").attr('disabled', false);
+                    $("#Username").attr('disabled', false);
+                    $("#Password").attr('disabled', false);
+                }
+                else {
+                    $("#Smtp").attr('disabled', true);
+                    $("#Port").attr('disabled', true);
+                    $("#Protocol").attr('disabled', true);
+                    $("#Username").attr('disabled', true);
+                    $("#Password").attr('disabled', true);
+                }
+            });
+
+            // Add user confirmation
+            $("#btnEditMiscellaneous").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var form = $("#formEditMiscellaneous");
+                if (form.valid()) {
+                    swal.fire({
+                        icon: 'question',
+                        title: 'Are you sure?',
+                        text: 'Confirm to edit miscellaneous?',
+                        showCancelButton: true,
+                        confirmButtonText:
+                            '<i class="fas fa-edit"></i> Edit',
+                        cancelButtonText:
+                            '<i class="fas fa-window-close"></i> Cancel',
+                    }).then(function (result) {
+                        if (result.isConfirmed) {
+                            // Remove disabled flag before submit so that value able to pass to controller
+                            $(":disabled", $('#formEditMiscellaneous')).removeAttr("disabled");
+                            form.submit();
+                        }
+                    })
+                }
+            });
+
+            @{
+                if (ViewBag.Message != null){
+                    // Show success msg
+                    if (ViewBag.Status == true){
+                        <text>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: '@ViewBag.Message',
+                                showConfirmButton: true,
+                                timer: 2000,
+                                timerProgressBar: true,
+                            }).then(function () {
+                                if (true) {
+                                    window.location.href = "@Url.Action("Index", "Misc")";
+                                }
+                            })
+                        </text>
+                    }
+                    // Show error msg
+                    else{
+                        <text>
+                            toastr.error(
+                                "@ViewBag.Message",
+                                "",
+                                {
+                                    positionClass: "toast-top-right",
+                                    showDuration: 300,
+                                    hideDuration: 1000,
+                                    timeOut: 3000,
+                                }
+                            );
+                        </text>
+                    }
+                }
+            }
+
+        });
+    </script>
+}

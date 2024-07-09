@@ -1,0 +1,174 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Record/Index.cshtml                                                                                  */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*      28/02/2023  Add status for record transfer                                  Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@using SPSLib;
+@model IEnumerable<SPS.Models.RecordInOutModels>
+@{
+    ViewBag.Title = "Record";
+}
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content mb-2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex flex-row align-items-center justify-content-between">
+                    <div class="btn-toolbar" role="toolbar">
+                        <div class="btn-group mr-2 mb-2" role="group">
+                            <a href="@Url.Action("RecordType", "Record")" class="btn btn-success btn-sm">
+                                <i class="fas fa-plus-circle"></i>
+                                <span class="text">Record In/Out</span>
+                            </a>
+                        </div>
+                        <div class="btn-group mb-2" role="group">
+                            <a href="@Url.Action("Import", "Record")" class="btn btn-primary btn-sm">
+                                <i class="fas fa-upload"></i>
+                                <span class="text">Import Record</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                            <h5 class="m-0 font-weight-bold text-dark">Record List</h5>
+                        </div>
+                        <div class="card-body">
+                            <table id="tblRecord" class="table table-bordered table-hover text-sm align-center vertical-align">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 25px;">No.</th>
+                                        <th>Rack Code</th>
+                                        <th>Part Code</th>
+                                        <th style="width: 170px;">Date / Time</th>
+                                        <th style="width: 40px;">Qty.</th>
+                                        <th style="width: 60px;">Status</th>
+                                        <th style="width: 60px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null)
+                                    {
+                                        foreach (var m in Model)
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                <td style="text-align: left;">@m.RackCode</td>
+                                                <td style="text-align: left;">@m.PartCode</td>
+                                                <td>@m.RecordDateTime</td>
+                                                <td>@m.RecordQty</td>
+                                                <td>
+                                                    @if (m.RecordStatus == (int)EnumEx.RecordStatus.STATUS_IN)
+                                                    {
+                                                        <span class="badge badge-success">In</span>
+                                                    }
+                                                    else if (m.RecordStatus == (int)EnumEx.RecordStatus.STATUS_OUT)
+                                                    {
+                                                        <span class="badge badge-danger">Out</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge badge-primary">Transfer</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <div class="btn-group btn-group-sm">
+                                                        <a href="@Url.Action("Detail", "Record", new { id = m.RecordId })" class="btn btn-primary" data-toggle="tooltip" title="Detail"><i class="fa fa-info-circle"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Styles{
+    @Styles.Render("~/content/datatable/css")
+}
+
+@section Scripts{
+    @Scripts.Render("~/bundles/datatable/script")
+
+    <script>
+        $(document).ready(function () {
+
+            // Show tooltips
+            $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+
+            // Set datatable datetime format
+            $.fn.dataTable.moment('DD-MM-YYYY hh:mm A');
+
+            // Display responsive datatable
+            var table = $('#tblRecord').DataTable({
+                "autoWidth": false,
+                "responsive": true,
+                "ordering": false,
+                "pageLength": 100,
+                "lengthMenu": [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+                "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+                "order": [[3, 'asc']],
+            });
+
+            // Insert row number for each data
+            table.on('order.dt search.dt', function () {
+                table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            @if (TempData["ErrMsg"] != null){
+                <text>
+                    toastr.error(
+                        "@TempData["ErrMsg"]",
+                        "",
+                        {
+                            positionClass: "toast-top-right",
+                            showDuration: 300,
+                            hideDuration: 1000,
+                            timeOut: 3000,
+                        }
+                    );
+                </text>
+            }
+        })
+    </script>
+}

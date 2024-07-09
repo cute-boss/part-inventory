@@ -1,0 +1,66 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Shared/Error.cshtml                                                                                  */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model System.Web.Mvc.HandleErrorInfo
+@{
+    ViewBag.Title = "Error";
+
+    if (!Request.IsAuthenticated)
+    {
+        Layout = null;
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="~/Images/sps_icon.png" type="image/x-icon">
+    <title>SPS - @ViewBag.Title</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <section class="text-center">
+            <div class="error-page">
+                @{
+                    if (@Response.StatusCode == 404)
+                    {
+                        <!-- 404 Error Text -->
+                        <h2 class="text-warning mx-auto" data-text="404">@Response.StatusCode</h2>
+                        <div class="error-content">
+                            <h3>
+                                <i class="fas fa-exclamation-triangle text-warning"></i>
+                                Opps! Page not found.
+                            </h3>
+                            <p class="text-gray-600 mb-0">An error occurred while processing your request.</p><br />
+                            <a href="@Url.Action("Index", "Record")">&larr; Return to Record</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <h2 class="text-danger mx-auto" data-text="404">@Response.StatusCode</h2>
+                        <div class="error-content">
+                            <i class="fas fa-exclamation-triangle text-danger"></i>
+                            Opps! Something went wrong.
+                            <p class="text-gray-600 mb-0">Please contact the system administrator.</p><br />
+                            <a href="@Url.Action("Index", "Record")">&larr; Return to Record</a>
+                        </div>
+                    }
+                }
+            </div>
+        </section>
+    </div>
+</body>
+</html>

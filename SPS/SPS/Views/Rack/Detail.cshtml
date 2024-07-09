@@ -1,0 +1,67 @@
+﻿@*
+/*------------------------------------------------------------------------------------------------------*/
+/* Copyright (C) Panasonic System Networks Malaysia Sdn. Bhd.                                           */
+/* Rack/Detail.cshtml                                                                                   */
+/*                                                                                                      */
+/* Modify History:							                                                            */
+/* 		Date        Comment			                                                Name	            */
+/*      ---------------------------------------------------------------------------------------------   */
+/*      20/05/2022  Initial version                                                 Azmir               */
+/*                                                                                                      */
+/*------------------------------------------------------------------------------------------------------*/
+*@
+
+@model SPS.Models.RackModels
+@{
+    ViewBag.Title = "Rack Detail";
+}
+
+<!-- Header -->
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark">@ViewBag.Title</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Record")">Record</a></li>
+                    <li class="breadcrumb-item"><a href="@Url.Action("Index", "Rack")">Rack</a></li>
+                    <li class="breadcrumb-item active">@ViewBag.Title</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card shadow mb-4">
+                    <div class="card card-primary card-outline ">
+                        <div class="card-header py-3">
+                            <h5 class="m-0 card-title font-weight-bold text-dark">Rack Information</h5>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                <strong>@Html.LabelFor(m => m.BuildingId)</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.BuildingName)</p>
+                                <hr />
+                                <strong>@Html.LabelFor(m => m.RackName, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RackName)</p>
+                                <strong>@Html.LabelFor(m => m.RackCode, new { @class = "text-sm" })</strong>
+                                <p class="text-muted">@Html.DisplayFor(m => m.RackCode)</p>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            @Html.ActionLink("Back", "Index", "Rack", new { }, new { @class = "btn btn-primary btn-sm" })
+                            @Html.ActionLink("Edit", "Edit", "Rack", new { id = Model.RackId }, new { @class = "btn btn-info btn-sm float-right" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
