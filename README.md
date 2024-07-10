@@ -27,3 +27,8 @@ Server
   <source media="(prefers-color-scheme: light)" srcset="https://github.com/cute-boss/part-inventory/blob/main/In1.png">
   <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://github.com/cute-boss/part-inventory/blob/main/In1.png">
 </picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/cute-boss/part-inventory/blob/main/In2.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/cute-boss/part-inventory/blob/main/In2.png">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://github.com/cute-boss/part-inventory/blob/main/In2.png">
+</picture>
