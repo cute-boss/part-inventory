@@ -13,7 +13,7 @@ Feature:
 Client 
 
 - Record inventory in, out and transfer
-- Inport record information using csv file
+- Import record information using csv file
 - User access right information
 - Export report in Excel format
 
